@@ -13,7 +13,14 @@ export default new Router({
     component: heat,
     children: []
   },
-
+    {
+      path: '/userInfo',
+      name: 'information',
+      component: heat,
+      children: []
+    },
   ],
+
+
   history: true
 })
