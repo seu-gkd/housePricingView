@@ -16,9 +16,22 @@ import Vuex from "vuex";
 // import './assets/ueditor/lang/zh-cn/zh-cn.js'
 // import './assets/ueditor/ueditor.parse.js'
 
-import {INTERFACE, ZHIHUI_INTERFACE} from "./namespace";
+import {INTERFACE, ZHIHUI_INTERFACE, SUB_INTERFAVE_URL} from "./namespace";
 import jQuery from "jquery";
+import {VChart, VLine, VArea, VBar, VPie, VPoint, VScale, VAxis, VTooltip, VLegend, VGuide, XButton} from 'vux'
 
+Vue.component('v-chart', VChart)
+Vue.component('v-line', VLine)
+Vue.component('v-area', VArea)
+Vue.component('v-bar', VBar)
+Vue.component('v-pie', VPie)
+Vue.component('v-point', VPoint)
+Vue.component('v-scale', VScale)
+Vue.component('v-axis', VAxis)
+Vue.component('v-guide', VGuide)
+Vue.component('v-tooltip', VTooltip)
+Vue.component('v-legend', VLegend)
+Vue.component('x-button', XButton)
 Vue.use(Vuex);
 
 Vue.use(ElementUI);
@@ -35,6 +48,10 @@ Vue.prototype.distinct = (arr) => {
   }
   return res
 };
+const FastClick = require('fastclick')
+FastClick.attach(document.body)
+const axios = require('axios')
+Vue.prototype.$ajax = axios;
 Vue.prototype.signUp = function () {
 
   // var self = this;
@@ -93,6 +110,7 @@ const store = new Vuex.Store({
     hospital: "1200",
     INTERFACE,
     ZHIHUI_INTERFACE,
+    SUB_INTERFAVE_URL,
     category_id: 250,
     noticeAgentId: 1000015,
     hospitalLogo: "http://gl-yiyuan.oss-cn-beijing.aliyuncs.com/LG.png",
