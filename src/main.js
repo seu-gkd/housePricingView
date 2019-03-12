@@ -10,6 +10,9 @@ import router from "./router";
 
 import Vuex from "vuex";
 
+import echarts from 'echarts'
+
+Vue.prototype.$echarts = echarts
 // UEditor相关
 // import './assets/ueditor/ueditor.config.js'
 // import './assets/ueditor/ueditor.all.js'
@@ -54,34 +57,6 @@ const axios = require('axios')
 Vue.prototype.$ajax = axios;
 Vue.prototype.signUp = function () {
 
-  // var self = this;
-  // $.ajax({
-  //     type: 'post',
-  //     //url: 'http://wechat.chinacaring.com:20999/api/sys/wxLogin/login?username=' + localStorage.getItem('user_id'),
-  //     url:this.$store.state.ZHIHUI_INTERFACE.LOGIN,
-  //     data: {
-  //       username: sessionStorage.getItem('username'),
-  //       password: sessionStorage.getItem('password'),
-  //       site: 'admin'
-  //     },
-  //     success: function(res) {
-
-  //         if (res.code === 0) {
-  //            sessionStorage.setItem('token', res.data)
-  //         document.cookie="token="+res.data;
-  //             //self.$router.go(0)
-
-  //             eval('self.'+function1+';');
-  //         } else {
-  //             alert(res.desc)
-  //             console.log(res.desc)
-  //         }
-  //     },
-  //     error: function() {
-  //         alert('网络出错请重试')
-  //         console.log('获取信息出错')
-  //     }
-  // })
   if (sessionStorage.getItem('haveShowBox') === 'true') return
   sessionStorage.setItem('haveShowBox', 'true')
   ElementUI.MessageBox.confirm('登录状态无效或过期，<br>请重新登录！', '', {
@@ -106,27 +81,11 @@ Vue.prototype.signUp = function () {
 const store = new Vuex.Store({
   // 存储状态值
   state: {
-    hospitalName: "淮安市淮安医院",
-    hospital: "1200",
-    INTERFACE,
-    ZHIHUI_INTERFACE,
-    SUB_INTERFAVE_URL,
-    category_id: 250,
-    noticeAgentId: 1000015,
-    hospitalLogo: "http://gl-yiyuan.oss-cn-beijing.aliyuncs.com/LG.png",
-    hospitalDes: "淮安市淮安医院",
-    // uploadImgServer: 'http://file.chinacaring.com/upload',
-    uploadImgServer: "http://111.231.75.164:2233/upload",
-    deleteImgServer: "http://111.231.75.164:2233/del",
-    Authorization: "Basic ZmlsZTpmaWxlY2FyaW5nMjAxNw==",
-    Authorization1: "Basic ZmlsZTpmaWxlUFc=",
-    // fileDIR: 'http://chinacaring.oss-cn-shanghai.aliyuncs.com/',
-    fileDIR: "https://chinaraising.oss-cn-hangzhou.aliyuncs.com/",
-    flag: {
-      newsList: true,
-      newsCate: true,
-      partyMemberList: true,
-    },
+    activeIndex: '1',
+    Server: 'http://localhost:9988',
+    currentUserInfo: sessionStorage.getItem('username'),
+    isLogin: sessionStorage.getItem('isLogin', 'false'),
+    currentLocation: '',
     menu: [],
     role: [],
     permission: [],
@@ -138,6 +97,8 @@ const store = new Vuex.Store({
   // 状态值的改变方法,操作状态值
   // 提交mutations是更改Vuex状态的唯一方法
   mutations: {
+
+
     // mutations
     changePartyMemberListFlag(state) {
       state.flag.partyMemberList = !state.flag.partyMemberList
@@ -180,8 +141,57 @@ const store = new Vuex.Store({
 });
 
 var nowRouteName = ''
-
+let self = this
 // function getUserInfo(callback) {
+Vue.prototype.logout = function () {
+  let self = this
+  // let loadingInstance = Loading.service({fullscreen: true});
+  jQuery.ajax({
+    type: 'GET',
+    headers: {
+//            Authorization: localStorage.getItem('token')
+    },
+    url: this.$store.state.Server + '/PersonUser/personUser/logout',
+//          url: self.$store.state.SUB_INTERFAVE_URL.GET_CHECKCODE,
+    data: {},
+    success: function (res) {
+      // loadingInstance.close()
+      if (res.code === 0) {
+        sessionStorage.setItem('jwt', null)
+        sessionStorage.setItem('username', null)
+        self.$store.state.currentUserInfo = null
+        self.$store.state.isLogin = 'false'
+        sessionStorage.setItem('isLogin', 'false')
+        self.$message.success('已退出')
+        self.$router.replace('/')
+        // self.$router.go(0)
+      } else {
+        self.$message.error(res.msg)
+      }
+    },
+    error: function () {
+      // loadingInstance.close()
+      self.$message.error('网络错误，请重试')
+    }
+  })
+}
+;
+Vue.prototype.go = function (i) {
+
+  if (i == '1') {
+    // store.state.activeIndex = '1'
+    router.replace('/')
+  }
+  else if (i == '2') {
+    // store.state.activeIndex = '2'
+    router.replace('/priceAnalysis')
+  }
+  else if (i == '3') {
+    // store.state.activeIndex = '3'
+    router.replace('/priceForecast')
+  }
+};
+
 function getUserInfo() {
   console.log(nowRouteName)
   jQuery.ajax({
@@ -310,104 +320,29 @@ function getMenu() {
   })
 }
 
+//定义获取基础数据的方法
+function initMainData() {
+  getCurrentCity()
+};
+
+function getCurrentCity() {    //定义获取城市方法
+  const geolocation = new BMap.Geolocation();
+  let self = this
+  geolocation.getCurrentPosition(function getinfo(position) {
+    let city = position.address.city;             //获取城市信息
+//          let province = position.address.province;    //获取省份信息
+    store.state.currentLocation = city.substr(0, city.length - 1)
+
+    sessionStorage.setItem('currentCity', city.substr(0, city.length - 1))
+  }, function (e) {
+  }, {provider: 'baidu'});
+};
 // const unloginOpenList = ['login', 'nf404'] // 未登录公共权限
 const LoginOpenList = [
-  "partyDuesAdd",
-  "partyDuesSetting",
-  "partyDuesEdit",
-  "partyMemberEdit",
-  "partyMemberDetail",
-  "partyMemberAdd",
-  "partyMemberList",
-  "examinationMain",
-  "activityUpdate",
-  "activityList",
-  "activityAdd",
-  "test1",
-  "login",
-  "changePass",
-  "main",
-  "nf404",
-  "nopower",
-  "index",
-  "help",
-  "doctorDetail",
-  "newsDetail",
-  "newsListEdit",
-  "noticeDetail",
-  "uploadVideo",
-  "role",
-  "examAdd",
-  "examCondition",
-  "examDetail",
-  "examList",
-  "examMain",
-  "modelExamSetting",
-  "questionAdd",
-  "questionDetail",
-  "questionImport",
-  "questionList",
-  "questionStoreList",
-  "orderDetail",
-  "questionare"
+  "/priceAnalysis",
+  '/priceForecast'
 ]; // 已登录公共权限
-// router.beforeEach((to, from, next) => {
-//   // 如果未匹配到路由
-//   if (to.matched.length === 0) {
-//     next({
-//       name: "nf404"
-//     });
-//     return;
-//   }
-//   // 如果为登录或nf404，直接通过
-//   if (to.name === "login" || to.name === "nf404") {
-//     next();
-//     return;
-//   }
-//   // 校验权限等的函数
-//   let checkPerFunc = function() {
-//     // 如果没有权限
-//     if (
-//       jQuery.inArray(to.name, store.state.permission) < 0 &&
-//       jQuery.inArray(to.name, LoginOpenList) < 0
-//     ) {
-//       next({
-//         name: "nopower"
-//       });
-//       return;
-//     }
-//     // 一切正常，则跳转
-//     next();
-//   };
-//   // 如果sessionStorage以及store里面的jwt（token）都没有了
-//   // 此场景发生在有人手欠，在前端删除sessionStorage，又刷新了页面（store被重置）
-//   if (sessionStorage.getItem("jwt") === null && store.state.jwt === "") {
-//     ElementUI.Message({
-//       message: "请先登录",
-//       type: "warning"
-//     });
-//     next({
-//       name: "login"
-//     });
-//     return;
-//   }
-//   // 如果sessionStorage里的jwt没有，但store里的jwt还在
-//   // 此场景发生在有人手欠前端删除sessionStorage，但是没有刷新页面（store没有被重置）
-//   if (sessionStorage.getItem("jwt") === null && store.state.jwt !== "") {
-//     sessionStorage.setItem("jwt", store.state.jwt);
-//   }
-//   // 如果store里的jwt没有了，但是sessionStorage里的jwt还在
-//   // 此场景发生在用户刷新了页面，store被重置的情况
-//   if (sessionStorage.getItem("jwt") !== null && store.state.jwt === "") {
-//     store.commit("setJwt", sessionStorage.getItem("jwt"));
-//   }
-//   // 用户刷新了页面，那么就要重新获取权限列表，再判断能不能进入当前这个路由
-//   if (store.state.permission.length === 0) {
-//     getUserInfo(checkPerFunc);
-//   } else {
-//     checkPerFunc();
-//   }
-// });
+
 
 /* eslint-disable no-new */
 var vm = new Vue({
@@ -415,6 +350,28 @@ var vm = new Vue({
   router,
   template: '<App/>',
   components: {App},
+
+  mounted() {
+    let self = this
+    initMainData()
+    router.beforeEach((to, from, next) => {
+      /* 路由发生变化修改页面title */
+      let temp = true
+      LoginOpenList.forEach(item => {
+        if (item == to.path) {
+          if (sessionStorage.getItem('jwt') == '') {
+            self.$message.error('请先登录')
+            temp = false
+            return
+          }
+        }
+      })
+      if (!temp) {
+        router.replace('/')
+      } else
+        next();
+    })
+  },
   // 将store实例注入到根组件下的所有子组件中
   store
   // 子组件通过this.$store来方位store

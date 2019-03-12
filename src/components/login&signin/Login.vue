@@ -10,7 +10,7 @@
       <div class="log-cloud cloud4"></div>
 
       <div class="log-logo">邮箱快捷登录</div>
-      <div class="log-text">@chy</div>
+      <div class="log-text">@GKD</div>
     </div>
     <div class="log-email">
       <input type="email" placeholder="邮箱" :class="'log-input' + (userinformation.account==''?' log-input-empty':'')"
@@ -67,7 +67,7 @@
             headers: {
 //            Authorization: localStorage.getItem('token')
             },
-            url: 'http://localhost:9988/PersonUser/personUser/login',
+            url: this.$store.state.Server + '/PersonUser/personUser/login',
 //          url: self.$store.state.SUB_INTERFAVE_URL.GET_CHECKCODE,
             data: {
               username: self.userinformation.account,
@@ -78,8 +78,12 @@
               if (res.code === 0) {
                 sessionStorage.setItem('jwt', res.data)
                 sessionStorage.setItem('username', self.userinformation.account)
+                self.$store.state.currentUserInfo = self.userinformation.account
+                self.$store.state.isLogin = 'true'
+                sessionStorage.setItem('isLogin', 'true')
                 self.$message.success('欢迎登录')
                 self.$router.replace('/');
+//                self.$router.go(0)
               } else {
                 self.$message.error(res.msg)
               }
@@ -104,7 +108,7 @@
     left: 50%;
     margin-left: -250px;
     top: 50%;
-    margin-top: -350px;
+    margin-top: -20%;
     width: 500px;
     min-height: 555px;
     z-index: 10;
@@ -138,6 +142,7 @@
 
   .log-cloud {
     background-image: url(../images/login-cloud.png);
+
     width: 63px;
     height: 40px;
     position: absolute;
@@ -172,7 +177,8 @@
   }
 
   .log-bg {
-    background: url(../images/login-bg.jpg);
+    /*background: url(../images/login-bg.jpg);*/
+    background-color: #00ae66;
     width: 100%;
     height: 312px;
     overflow: hidden;
@@ -182,13 +188,13 @@
     height: 80px;
     margin: 120px auto 25px;
     text-align: center;
-    color: #1fcab3;
+    color: white;
     font-weight: bold;
     font-size: 40px;
   }
 
   .log-text {
-    color: #57d4c3;
+    color: white;
     font-size: 13px;
     text-align: center;
     margin: 0 auto;
@@ -230,7 +236,7 @@
     color: #fff;
     font-size: 13px;
     -webkit-border-radius: 5px;
-    background-color: #3B5999;
+    background-color: #00ae66;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
@@ -257,7 +263,7 @@
   }
 
   .log-email .log-btn {
-    background-color: #50E3CE;
+    background-color: #00ae66;
     text-align: center;
   }
 
