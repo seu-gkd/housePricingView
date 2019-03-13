@@ -4,7 +4,6 @@
       :default-active="$store.state.activeIndex"
       class="el-menu"
       mode="horizontal"
-
       text-color="#fff"
       active-text-color="#fff">
       <div class="logo">
@@ -13,14 +12,14 @@
         <!--<div class="subTitle">搞得快一点</div>-->
       </div>
       <span class="CurrentLocation el-icon-location-outline">{{this.$store.state.currentLocation}}</span>
-      <el-menu-item index="1" @click="go('1')">
+      <el-menu-item index="/" @click="go('/')">
         主页
       </el-menu-item>
-      <el-menu-item index="2" @click="go('2')">房价统计</el-menu-item>
-      <el-menu-item index="3" @click="go('3')">房价预测</el-menu-item>
+      <el-menu-item index="/priceAnalysis" @click="go('/priceAnalysis')">房价统计</el-menu-item>
+      <el-menu-item index="/priceForecast" @click="go('/priceForecast')">房价预测</el-menu-item>
 
 
-      <div class="account-admin" v-if="this.$store.state.isLogin=='true'">
+      <div class="account-admin" v-if="this.$store.state.currentUserInfo!=null">
         <span class="top-btn">
               <el-dropdown style="cursor:pointer;" :show-timeout="0">
                 <span class="el-dropdown-link" style="color:#fff;">
@@ -39,7 +38,7 @@
             <!--<div @click="toPath('changePass')">修改密码</div>-->
             <!--</el-dropdown-item>-->
              <el-dropdown-item>
-          <div>用户中心</div>
+          <div @click="go('/userManage')">用户中心</div>
         </el-dropdown-item>
             <el-dropdown-item>
               <div @click="logout()">退出登录</div>
@@ -51,10 +50,10 @@
       <!--<el-menu-item style="float: right;margin-right: 3rem;" index="4" v-if="currentUserInfo!=''">-->
       <!--<router-link to="">用户中心</router-link>-->
       <!--</el-menu-item>-->
-      <el-menu-item style="float: right;margin-right: 3rem;" index="4" v-if="this.$store.state.isLogin=='false'">
+      <el-menu-item style="float: right;margin-right: 3rem;" index="4" v-if="this.$store.state.currentUserInfo==null">
         <router-link to="/signin" style="text-decoration: none">注册</router-link>
       </el-menu-item>
-      <el-menu-item style="float: right;margin-right: 3rem;" index="4" v-if="this.$store.state.isLogin=='false'">
+      <el-menu-item style="float: right;margin-right: 3rem;" index="5" v-if="this.$store.state.currentUserInfo==null">
         <router-link style="text-decoration: none" to="/login">登陆</router-link>
       </el-menu-item>
     </el-menu>
@@ -123,6 +122,11 @@
 
   }
 
+  .el-menu-item {
+    background-color: transparent;
+
+  }
+
   .logoTitle {
     font-size: 35px;
     padding-top: 5px;
@@ -172,6 +176,7 @@
     width: 100%;
     position: absolute;
     overflow: hidden;
+    overflow-y: scroll;
   }
 
   .slide-fade-enter-active {

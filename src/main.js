@@ -74,17 +74,17 @@ Vue.prototype.signUp = function () {
       name: 'login'
     })
   }).catch(() => {
-    sessionStorage.setItem('haveShowBox', 'false')
+    sessionStorage.setItem('haveShowBox', false)
   })
 };
 // 创建Store实例
 const store = new Vuex.Store({
   // 存储状态值
   state: {
-    activeIndex: '1',
+    activeIndex: '/',
     Server: 'http://localhost:9988',
-    currentUserInfo: sessionStorage.getItem('username'),
-    isLogin: sessionStorage.getItem('isLogin', 'false'),
+    currentUserInfo: null,
+    isLogin: '1',
     currentLocation: '',
     menu: [],
     role: [],
@@ -160,8 +160,8 @@ Vue.prototype.logout = function () {
         sessionStorage.setItem('jwt', null)
         sessionStorage.setItem('username', null)
         self.$store.state.currentUserInfo = null
-        self.$store.state.isLogin = 'false'
-        sessionStorage.setItem('isLogin', 'false')
+        self.$store.state.isLogin = '1'
+        sessionStorage.setItem('isLogin', '1')
         self.$message.success('已退出')
         self.$router.replace('/')
         // self.$router.go(0)
@@ -176,20 +176,25 @@ Vue.prototype.logout = function () {
   })
 }
 ;
-Vue.prototype.go = function (i) {
-
-  if (i == '1') {
-    // store.state.activeIndex = '1'
-    router.replace('/')
-  }
-  else if (i == '2') {
-    // store.state.activeIndex = '2'
-    router.replace('/priceAnalysis')
-  }
-  else if (i == '3') {
-    // store.state.activeIndex = '3'
-    router.replace('/priceForecast')
-  }
+Vue.prototype.go = function (key) {
+  // if (store.state.activeIndex == i)
+  //   return
+  router.replace(key)
+  // if (i == '1') {
+  //   // store.state.activeIndex = '1'
+  //   router.replace('/')
+  // }
+  // else if (i == '2') {
+  //   // store.state.activeIndex = '2'
+  //   router.replace('/priceAnalysis')
+  // }
+  // else if (i == '4') {
+  //   // store.state.activeIndex = '3'
+  //   router.replace('/userManage')
+  // }
+  // else if (i == '4') {
+  //   router.replace('/priceForecast')
+  // }
 };
 
 function getUserInfo() {
@@ -322,6 +327,8 @@ function getMenu() {
 
 //定义获取基础数据的方法
 function initMainData() {
+  // store.state.isLogin = sessionStorage.getItem('isLogin', '1')
+  store.state.currentUserInfo = sessionStorage.getItem('username')
   getCurrentCity()
 };
 
@@ -340,7 +347,8 @@ function getCurrentCity() {    //定义获取城市方法
 // const unloginOpenList = ['login', 'nf404'] // 未登录公共权限
 const LoginOpenList = [
   "/priceAnalysis",
-  '/priceForecast'
+  '/priceForecast',
+  '/userManage'
 ]; // 已登录公共权限
 
 
@@ -359,7 +367,7 @@ var vm = new Vue({
       let temp = true
       LoginOpenList.forEach(item => {
         if (item == to.path) {
-          if (sessionStorage.getItem('jwt') == '') {
+          if (sessionStorage.getItem('jwt') == null || sessionStorage.getItem('jwt') == '' || sessionStorage.getItem('jwt') == 'null') {
             self.$message.error('请先登录')
             temp = false
             return

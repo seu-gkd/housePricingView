@@ -79,8 +79,8 @@
                 sessionStorage.setItem('jwt', res.data)
                 sessionStorage.setItem('username', self.userinformation.account)
                 self.$store.state.currentUserInfo = self.userinformation.account
-                self.$store.state.isLogin = 'true'
-                sessionStorage.setItem('isLogin', 'true')
+                self.$store.state.isLogin = '2'
+                sessionStorage.setItem('isLogin', '2')
                 self.$message.success('欢迎登录')
                 self.$router.replace('/');
 //                self.$router.go(0)

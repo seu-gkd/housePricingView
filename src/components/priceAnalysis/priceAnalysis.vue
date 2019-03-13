@@ -65,6 +65,20 @@
                 </el-card>
 
                 <el-card style="height: auto;margin-top: 1rem;min-height: 20rem">
+                  <el-select v-model="regionForData" placeholder="请选择区" multiple>
+                    <el-option
+                      label="全市"
+                      key="全市"
+                      value="无"
+                    ></el-option>
+                    <el-option
+                      v-for="item in currentLocationInfo.regionsInfo"
+                      :key="item.regionName"
+                      :label="item.regionName"
+                      :value="item.regionName">
+                    </el-option>
+                  </el-select>
+                  <el-button @click="regionHistory">查询</el-button>
                   <div id="chartmainline" style="width:100%;height:500px"></div>
                   <div id="priceRateChart" style="width:100%;height:500px;margin-top: 2rem;"></div>
                   <div>
@@ -189,6 +203,7 @@
     name: 'priceAnalysis',
     data() {
       return {
+        regionForData: [],
         options: [],
         //楼盘列表信息
         buildingsByRegion: {
@@ -219,13 +234,7 @@
         },
         inputContent: '',
         //区域历史数据
-        locationHistoryData: {
-          cityName: '',
-          historyData: {
-            time: [],
-            price: []
-          }
-        },
+        locationHistoryData: [],
 
 
         optionbar: {
@@ -267,7 +276,8 @@
             this.showCityInfo = true
           }
         }
-      }
+      },
+
     },
     methods: {
       getAllCities() {
@@ -327,6 +337,7 @@
             if (res.code === 0) {
               self.currentLocationInfo.locationName = ''
               self.currentRegion = ''
+              self.locationHistoryData = []
               self.currentLocationInfo.locationPrice = ''
               self.currentLocationInfo.locationLevel = ''
               self.currentLocationInfo.locationSupply = ''
@@ -354,7 +365,6 @@
               }
               self.getCityHistoryData()
               self.getRegionPricesByType()
-              self.showPriceRateChart()
               self.showRoundChart()
             }
           },
@@ -388,19 +398,81 @@
           url: this.$store.state.Server + '/buildingPrice/pricehistorynew/citypricehistory',
           data: {
             city: self.currentLocationInfo.locationName,
+            regionName: '无'
           },
           success: function (res) {
             loadingInstance.close()
             if (res.code === 0) {
-              self.locationHistoryData.cityName = ''
-              self.locationHistoryData.historyData.time = []
-              self.locationHistoryData.historyData.price = []
-              self.locationHistoryData.cityName = res.data.cityName
+              let temp = {
+                cityName: '',
+                historyData: {
+                  time: [],
+                  price: [],
+                  proportion: []
+                }
+              }
+              self.locationHistoryData = []
+              temp.cityName = res.data.cityName
+
               res.data.priceHistory.forEach((item) => {
-                self.locationHistoryData.historyData.time.push(item.time)
-                self.locationHistoryData.historyData.price.push(item.price)
+                temp.historyData.time.push(item.time)
+                temp.historyData.price.push(item.price)
+                temp.historyData.proportion.push(item.proportion)
               })
+              self.locationHistoryData.push(temp)
               self.showLineChart()
+              self.showPriceRateChart()
+
+            }
+          },
+          error: function () {
+            loadingInstance.close()
+            self.$message.error('查询错误,请稍后重试')
+          }
+        })
+      },
+      regionHistory() {
+        this.locationHistoryData = []
+//        for(let i in this.regionForData){
+//          this.getRegionHistoryData(this.regionForData[i])
+//        }
+        this.regionForData.forEach(item => {
+          this.getRegionHistoryData(item)
+        })
+
+      },
+      getRegionHistoryData(regionName) {
+        var self = this
+        let loadingInstance = Loading.service({target: document.getElementById('chartmainline')});
+
+        jQuery.ajax({
+          type: 'get',
+          url: this.$store.state.Server + '/buildingPrice/pricehistorynew/citypricehistory',
+          data: {
+            city: self.currentLocationInfo.locationName,
+            regionName: regionName
+          },
+          success: function (res) {
+            loadingInstance.close()
+            if (res.code === 0) {
+              let temp = {
+                cityName: '',
+                historyData: {
+                  time: [],
+                  price: [],
+                  proportion: []
+                }
+              }
+
+              temp.cityName = res.data.cityName
+              res.data.priceHistory.forEach((item) => {
+                temp.historyData.time.push(item.time)
+                temp.historyData.price.push(item.price)
+                temp.historyData.proportion.push(item.proportion)
+              })
+              self.locationHistoryData.push(temp)
+              self.showLineChart()
+              self.showPriceRateChart()
             }
           },
           error: function () {
@@ -614,6 +686,20 @@
 
       },
       showLineChart() {
+        let datas = []
+//        if(this.locationHistoryData.length==0)
+//          return
+        this.locationHistoryData.forEach(item1 => {
+          let tempRegion = {
+            data: item1.historyData.price.map(item => {
+              return item
+            }),
+            type: 'line',
+            smooth: true,
+            name: item1.cityName
+          }
+          datas.push(tempRegion)
+        })
         let option = {
           title: {
             text: this.currentLocationInfo.locationName + '房价趋势图',
@@ -625,61 +711,68 @@
           },
           xAxis: {
             type: 'category',
-            data: this.locationHistoryData.historyData.time
+            data: this.locationHistoryData[0].historyData.time.map(item => {
+              return item
+            })
           },
           yAxis: {
             type: 'value'
           },
           dataZoom: [{
-            startValue: this.locationHistoryData.historyData.time[0]
+            startValue: this.locationHistoryData[0].historyData.time[0]
           }, {
             type: 'inside'
           }],
-          visualMap: {
-            top: -5,
-            right: 1,
-            pieces: [{
-              gt: 0,
-              lte: 10000,
-              color: '#096'
-            }, {
-              gt: 10000,
-              lte: 20000,
-              color: '#ffde33'
-            }, {
-              gt: 20000,
-              lte: 30000,
-              color: '#ff9933'
-            }, {
-              gt: 30000,
-              lte: 40000,
-              color: '#cc0033'
-            }, {
-              gt: 40000,
-              lte: 50000,
-              color: '#660099'
-            }, {
-              gt: 50000,
-              color: '#7e0023'
-            }],
-            outOfRange: {
-              color: '#999'
-            }
-          },
-          series: [{
-            data: this.locationHistoryData.historyData.price,
-            type: 'line',
-            smooth: false,
-          }, {
-            data: this.locationHistoryData.historyData.price,
-            type: 'bar',
-          }]
+//          visualMap: {
+//            top: -5,
+//            right: 1,
+//            pieces: [{
+//              gt: 0,
+//              lte: 10000,
+//              color: '#096'
+//            }, {
+//              gt: 10000,
+//              lte: 20000,
+//              color: '#ffde33'
+//            }, {
+//              gt: 20000,
+//              lte: 30000,
+//              color: '#ff9933'
+//            }, {
+//              gt: 30000,
+//              lte: 40000,
+//              color: '#cc0033'
+//            }, {
+//              gt: 40000,
+//              lte: 50000,
+//              color: '#660099'
+//            }, {
+//              gt: 50000,
+//              color: '#7e0023'
+//            }],
+//            outOfRange: {
+//              color: '#999'
+//            }
+//          },
+          series: datas
         };
         let chartmainline = echarts.init(document.getElementById('chartmainline'));
         chartmainline.setOption(option, true);
 
       },
       showPriceRateChart() {
+        let datas = []
+        this.locationHistoryData.forEach(item1 => {
+          let tempRegion = {
+            data: item1.historyData.proportion.map(item => {
+              return item * 100
+            }),
+            type: 'line',
+            smooth: false,
+            name: item1.cityName
+          }
+          datas.push(tempRegion)
+        })
         let option = {
           title: {
             text: this.currentLocationInfo.locationName + '房价变化速率折线图',
@@ -692,55 +785,51 @@
           xAxis: {
             type: 'category',
             name: '时间',
-            data: this.currentLocationInfo.proportion.time
+            data: this.locationHistoryData[0].historyData.time.map(item => {
+              return item
+            })
           },
           yAxis: {
             type: 'value',
             name: '百分比'
           },
           dataZoom: [{
-            startValue: this.currentLocationInfo.proportion.time[0]
+            startValue: this.locationHistoryData[0].historyData.time[0]
           }, {
             type: 'inside'
           }],
-          visualMap: {
-            top: 10,
-            right: 10,
-            pieces: [{
-              gt: -5,
-              lte: 0,
-              color: '#096'
-            }, {
-              gt: 0,
-              lte: 5,
-              color: '#ffde33'
-            }, {
-              gt: 5,
-              lte: 10,
-              color: '#ff9933'
-            }, {
-              gt: 10,
-              lte: 15,
-              color: '#cc0033'
-            }, {
-              gt: 15,
-              lte: 20,
-              color: '#660099'
-            }, {
-              gt: 20,
-              color: '#7e0023'
-            }],
-            outOfRange: {
-              color: '#999'
-            }
-          },
-          series: [{
-            data: this.currentLocationInfo.proportion.proportion.map(function (d) {
-              return d * 100;
-            }),
-            type: 'line',
-            smooth: false,
-          },]
+//          visualMap: {
+//            top: 10,
+//            right: 10,
+//            pieces: [{
+//              gt: -5,
+//              lte: 0,
+//              color: '#096'
+//            }, {
+//              gt: 0,
+//              lte: 5,
+//              color: '#ffde33'
+//            }, {
+//              gt: 5,
+//              lte: 10,
+//              color: '#ff9933'
+//            }, {
+//              gt: 10,
+//              lte: 15,
+//              color: '#cc0033'
+//            }, {
+//              gt: 15,
+//              lte: 20,
+//              color: '#660099'
+//            }, {
+//              gt: 20,
+//              color: '#7e0023'
+//            }],
+//            outOfRange: {
+//              color: '#999'
+//            }
+//          },
+          series: datas
         };
         let priceRateChart = echarts.init(document.getElementById('priceRateChart'));
         priceRateChart.setOption(option, true);
