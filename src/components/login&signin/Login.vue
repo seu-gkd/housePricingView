@@ -2,7 +2,7 @@
 
 <template>
   <div class="login" id="login">
-    <div @click="goBack()" class="log-close"><i class="icons close"></i></div>
+    <div @click="goBack()" class="log-close"><span class="icons close"></span></div>
     <div class="log-bg">
       <div class="log-cloud cloud1"></div>
       <div class="log-cloud cloud2"></div>
@@ -178,7 +178,7 @@
 
   .log-bg {
     /*background: url(../images/login-bg.jpg);*/
-    background-color: #00ae66;
+    background-color: #ebb563;
     width: 100%;
     height: 312px;
     overflow: hidden;
@@ -205,7 +205,7 @@
   }
 
   .icons {
-    background: url(../images/icons.png) no-repeat;
+    background-image: url(../images/icons111.png);
     display: inline-block;
   }
 
@@ -236,7 +236,7 @@
     color: #fff;
     font-size: 13px;
     -webkit-border-radius: 5px;
-    background-color: #00ae66;
+    background-color: #ebb563;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
@@ -263,7 +263,7 @@
   }
 
   .log-email .log-btn {
-    background-color: #00ae66;
+    background-color: #ebb563;
     text-align: center;
   }
 

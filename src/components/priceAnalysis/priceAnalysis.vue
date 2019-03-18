@@ -1,197 +1,214 @@
 <template>
-  <div class="sub-route">
-    <section class="app-section" id="priceAnalysis">
+  <div>
+    <el-collapse-transition>
+      <router-view></router-view>
+    </el-collapse-transition>
+    <div class="sub-route">
 
-      <div style="width:100%;overflow-y: scroll;height: 100%;padding-top:60px;background-color: white">
-        <div class="mainContent">
-          <el-card class="regionSelect" id="regionSelect">
-            <div style="width:100%;text-align: center">
-              <el-select v-model="inputContent"
-                         style="margin-top: 0.6%;border-radius:10px;width: 20rem;margin-bottom: 2rem"
-                         placeholder="查询城市名称" filterable
-              >
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
+      <section class="app-section" id="priceAnalysis">
 
-              </el-select>
-              <el-button style="display: inline;" slot="append" icon="el-icon-search" @click="search"></el-button>
-            </div>
-            <div>区域选择：</div>
-            <el-radio-group fill="#00ae66" size="mini" style="overflow: hidden;overflow-x: hidden;width: 100%"
-                            v-model="currentRegion">
-              <el-radio-button class="regionBtn"
-                               :label="currentLocationInfo.locationName">全{{currentLocationInfo.locationName}}市
-              </el-radio-button>
-              <el-radio-button v-for="region in currentLocationInfo.regionsInfo1" :key="region.regionName"
-                               class="regionBtn"
-                               :label="region.regionName">{{region.regionName}}区
-              </el-radio-button>
-            </el-radio-group>
-            <el-radio-group size="mini" style="overflow: hidden;overflow-x: hidden;width: 100%" v-model="currentRegion">
-              <el-radio-button v-for="region in currentLocationInfo.regionsInfo2" :key="region.regionName"
-                               class="regionBtn"
-                               :label="region.regionName">{{region.regionName}}区
-              </el-radio-button>
-            </el-radio-group>
-          </el-card>
-          <div style="width: 100%;margin-top: 1rem">
-            <el-row :gutter="20">
-              <el-col :span="18" v-show="showCityInfo">
-                <el-card style="background-color:#00ae66;height: 20rem;text-align: left;color:white;font-size: 13px"
-                         v-model="currentLocationInfo">
-                  <div class="clearfix">
-                    {{currentLocationInfo.locationName}}
-                    <span style="font-size: 20px">{{currentLocationInfo.locationLevel}}</span>
-                  </div>
-                  <div>近期平均房价</div>
+        <div style="width:100%;height: 100%;padding-top: 60px">
 
-                  <div>
-                    <div style="height: 60px">
+
+          <div class="mainContent">
+            <el-card class="regionSelect" id="regionSelect">
+              <div style="width:100%;text-align: center">
+                <el-select v-model="inputContent"
+                           style="margin-top: 0.6%;border-radius:10px;width: 20rem;margin-bottom: 2rem"
+                           placeholder="查询城市名称" filterable
+                >
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+
+                </el-select>
+                <el-button type="warning" style="display: inline;" slot="append" icon="el-icon-search"
+                           @click="search"></el-button>
+              </div>
+              <div>区域选择：</div>
+              <el-radio-group fill="#ebb563" size="mini" style="overflow: hidden;overflow-x: hidden;width: 100%"
+                              v-model="currentRegion">
+                <el-radio-button class="regionBtn"
+                                 :label="currentLocationInfo.locationName">全{{currentLocationInfo.locationName}}市
+                </el-radio-button>
+                <el-radio-button v-for="region in currentLocationInfo.regionsInfo1" :key="region.regionName"
+                                 class="regionBtn"
+                                 :label="region.regionName">{{region.regionName}}区
+                </el-radio-button>
+              </el-radio-group>
+              <el-radio-group size="mini" style="overflow: hidden;overflow-x: hidden;width: 100%"
+                              v-model="currentRegion">
+                <el-radio-button v-for="region in currentLocationInfo.regionsInfo2" :key="region.regionName"
+                                 class="regionBtn"
+                                 :label="region.regionName">{{region.regionName}}区
+                </el-radio-button>
+              </el-radio-group>
+            </el-card>
+            <div style="width: 100%;margin-top: 1rem">
+              <el-row :gutter="20">
+                <el-col :span="18" v-show="showCityInfo">
+                  <el-card style="background-color:#ebb563;height: 20rem;text-align: left;color:white;font-size: 13px"
+                           v-model="currentLocationInfo">
+                    <div class="clearfix">
+                      {{currentLocationInfo.locationName}}
+                      <!--<span style="font-size: 20px">{{currentLocationInfo.locationLevel}}</span>-->
+                    </div>
+                    <div>近期平均房价</div>
+
+                    <div>
+                      <div style="height: 60px">
                   <span
                     style="font-size: 60px;">{{Math.round(currentLocationInfo.locationPrice) }}</span>
-                      <span>&nbsp;&nbsp; 元/㎡</span>
-                      <span class="line"></span>
-                      <span style="float: right">
+                        <span>&nbsp;&nbsp; 元/㎡</span>
+                        <span class="line"></span>
+                        <span style="float: right">
                      挂牌&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <span style="font-size: 60px;">{{Math.round(currentLocationInfo.locationSupply / 100) / 100}}</span>&nbsp;&nbsp;&nbsp;万套
                   </span>
+                      </div>
                     </div>
-                  </div>
 
-                </el-card>
+                  </el-card>
 
-                <el-card style="height: auto;margin-top: 1rem;min-height: 20rem">
-                  <el-select v-model="regionForData" placeholder="请选择区" multiple>
-                    <el-option
-                      label="全市"
-                      key="全市"
-                      value="无"
-                    ></el-option>
-                    <el-option
-                      v-for="item in currentLocationInfo.regionsInfo"
-                      :key="item.regionName"
-                      :label="item.regionName"
-                      :value="item.regionName">
-                    </el-option>
-                  </el-select>
-                  <el-button @click="regionHistory">查询</el-button>
-                  <div id="chartmainline" style="width:100%;height:500px"></div>
-                  <div id="priceRateChart" style="width:100%;height:500px;margin-top: 2rem;"></div>
-                  <div>
-                    <div id="chart1"></div>
-                    <div id="chart2"></div>
-                  </div>
+                  <el-card style="height: auto;margin-top: 1rem;min-height: 20rem">
+                    <el-select v-model="regionForData" placeholder="请选择区" multiple>
+                      <el-option
+                        label="全市"
+                        key="全市"
+                        value="无"
+                      ></el-option>
+                      <el-option
+                        v-for="item in currentLocationInfo.regionsInfo"
+                        :key="item.regionName"
+                        :label="item.regionName"
+                        :value="item.regionName">
+                      </el-option>
+                    </el-select>
+                    <el-button type="info" @click="regionHistory">查询</el-button>
+                    <div id="chartmainline" style="width:100%;height:500px"></div>
+                    <div id="priceRateChart" style="width:100%;height:500px;margin-top: 2rem;"></div>
+                    <div>
+                      <div id="chart1"></div>
+                      <div id="chart2"></div>
+                    </div>
 
 
-                </el-card>
-              </el-col>
-              <el-col :span="18" v-show="!showCityInfo">
-                <el-card
-                  style="background-color:#00ae66;height: 3.5rem;text-align: left;color:white;font-size: 22px;vertical-align: middle">
-                  {{currentRegion}}区楼盘信息
-                </el-card>
-                <el-card class="buildingList" id="buildingBinding">
-                  <div>
-                    <div class="buildingItem" v-for="item in buildingsByRegion.buildings" :key="item.id">
-                      <img class="buildImg"
-                           style="background-color:#00ae66"
-                           src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3934637875,3708288823&fm=26&gp=0.jpg"
-                      />
-                      <div class="buildContent">
-                        <div>
-                          <div class="buildName">{{item.xiaoqu}}</div>
-                          <div class="resblock-location">
-                            <span>{{item.region}}</span>
-                            <i class="split">/</i>
-                            <span>{{item.propertyaddress}}</span>
-                          </div>
-                          <div class="resblock-area">
-                            <span>建面 {{Math.round(item.area)}}㎡</span>
-                          </div>
-                          <div class="resblock-tag">
+                  </el-card>
+                </el-col>
+                <el-col :span="18" v-show="!showCityInfo">
+                  <el-card
+                    style="background-color:#ebb563;height: 3.5rem;text-align: left;color:white;font-size: 22px;vertical-align: middle">
+                    {{currentRegion}}区楼盘信息
+                  </el-card>
+                  <el-card class="buildingList" id="buildingBinding">
+                    <div>
+                      <div class="buildingItem" v-for="item in buildingsByRegion.buildings" :key="item.id"
+                      >
+                        <img class="buildImg"
+                             style="background-color:#ebb563"
+                             src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3934637875,3708288823&fm=26&gp=0.jpg"
+                        />
+                        <div class="buildContent" @click="itemDetail(item.id)">
+                          <div>
+                            <div class="buildName">{{item.xiaoqu}}</div>
+                            <div class="resblock-location">
+                              <span>{{item.region}}</span>
+                              <i class="split">/</i>
+                              <span>{{item.propertyaddress}}</span>
+                            </div>
+                            <div class="resblock-area">
+                              <span>建面 {{Math.round(item.area)}}㎡</span>
+                            </div>
+                            <div class="resblock-tag">
                           <span v-for="(it,index) in item.projectfeatures.split(' ')" :key="index">
                             {{it}}
                           </span>
 
-                          </div>
-                          <div class="resblock-price">
-                            <div class="main-price">
+                            </div>
+                            <div class="resblock-price">
+                              <div class="main-price">
 
-                              <span class="number">{{item.price}}</span>
-                              <span class="desc">&nbsp;元/平(均价)</span>
+                                <span class="number">{{item.price}}</span>
+                                <span class="desc">&nbsp;元/平(均价)</span>
+
+                              </div>
+
 
                             </div>
-
-
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="buildingsByRegion.pageNo"
-                    :page-sizes="[5,10, 20, 30]"
-                    :page-size="buildingsByRegion.pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    class="buildingsPagincation"
-                    :total="buildingsByRegion.totalRecord">
-                  </el-pagination>
-                </el-card>
-              </el-col>
-              <el-col :span="6">
-                <el-card style="height:auto;">
-                  <div slot="header" class="rightHeaderTitle" v-model="currentLocationInfo">
-                    <span>{{currentLocationInfo.locationName}}市各区房价</span>
+                    <el-pagination
+                      @size-change="handleSizeChange"
+                      @current-change="handleCurrentChange"
+                      :current-page="buildingsByRegion.pageNo"
+                      :page-sizes="[5,10, 20, 30]"
+                      :page-size="buildingsByRegion.pageSize"
+                      layout="total, sizes, prev, pager, next, jumper"
+                      class="buildingsPagincation"
+                      :total="buildingsByRegion.totalRecord">
+                    </el-pagination>
+                  </el-card>
+                </el-col>
+                <el-col :span="6">
+                  <el-card style="height:auto;">
+                    <div slot="header" class="rightHeaderTitle" v-model="currentLocationInfo">
+                      <span>{{currentLocationInfo.locationName}}市各区房价</span>
 
-                    <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
-                  </div>
-                  <el-row :gutter="1" class="left-title">
+                      <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
+                    </div>
+                    <el-row :gutter="1" class="left-title">
 
-
-                    <el-col :span="8">
-                      <div class="grid-content bg-purple">行政区</div>
-                    </el-col>
-                    <el-col :span="8">
-                      <div class="grid-content bg-purple">房价(元/平方米)</div>
-                    </el-col>
-                    <el-col :span="8">
-                      <div class="grid-content bg-purple">供给量(套)</div>
-                    </el-col>
-
-                  </el-row>
-                  <div v-for="item in currentLocationInfo.regionsInfo" :key="item.regionName" class="text item">
-                    <el-row :gutter="1" class="left-item">
 
                       <el-col :span="8">
-                        <div class="grid-content bg-purple item-name">{{item.regionName}}区</div>
+                        <div class="grid-content bg-purple">行政区</div>
                       </el-col>
                       <el-col :span="8">
-                        <div class="grid-content bg-purple">{{Math.round(item.price) }}</div>
+                        <div class="grid-content bg-purple">房价(元/平方米)</div>
                       </el-col>
                       <el-col :span="8">
-                        <div class="grid-content bg-purple">{{Math.round(item.supply) }}</div>
+                        <div class="grid-content bg-purple">供给量(套)</div>
                       </el-col>
-
 
                     </el-row>
-                  </div>
-                </el-card>
-              </el-col>
+                    <div v-for="item in currentLocationInfo.regionsInfo" :key="item.regionName" class="text item">
+                      <el-row :gutter="1" class="left-item">
 
-            </el-row>
+                        <el-col :span="8">
+                          <div class="grid-content bg-purple item-name">{{item.regionName}}区</div>
+                        </el-col>
+                        <el-col :span="8">
+                          <div class="grid-content bg-purple">{{Math.round(item.price) }}</div>
+                        </el-col>
+                        <el-col :span="8">
+                          <div class="grid-content bg-purple">{{Math.round(item.supply) }}</div>
+                        </el-col>
+
+
+                      </el-row>
+                    </div>
+                  </el-card>
+                </el-col>
+
+              </el-row>
+            </div>
           </div>
+          <footer class="main-page-footer">
+            © Copyright©2010-2019 GKD版权所有&nbsp;
+            <div><a target="_blank"
+                    href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802024019"
+                    style="display:inline-block;text-decoration:none;height:20px;line-height:20px;margin: 0 auto;text-align: center;">
+
+            </a></div>
+          </footer>
         </div>
-      </div>
-      <footer class="main-page-footer">
-        CopyRight &copy; 2019 GKD
-      </footer>
-    </section>
+
+      </section>
+    </div>
   </div>
 </template>
 
@@ -280,6 +297,16 @@
 
     },
     methods: {
+      itemDetail(id) {
+        console.log('asd')
+        this.$router.push({
+          name: 'buildDetail',
+          path: '/priceAnalysis/buildDetail',
+          params: {
+            id: id
+          }
+        },)
+      },
       getAllCities() {
         var self = this
         let loadingInstance = Loading.service({target: document.getElementById('regionSelect')});
@@ -375,12 +402,20 @@
         })
       },
       initData() {
+        this.$store.state.activeIndex = '/priceAnalysis'
         //到时候添加对路由跳转数据的判断
+
+
         if (sessionStorage.getItem('jwt') != null) {
           this.currentUserInfo = sessionStorage.getItem('username')
 
         }
         let cityName = sessionStorage.getItem('currentCity')
+        if (this.$route.params.info && this.$route.params.info !== '') {
+          this.$store.state.activeIndex = '/priceAnalysis'
+          cityName = this.$route.params.info
+        }
+
         if (cityName == null || cityName == '') {
           return
         }
@@ -398,7 +433,7 @@
           url: this.$store.state.Server + '/buildingPrice/pricehistorynew/citypricehistory',
           data: {
             city: self.currentLocationInfo.locationName,
-            regionName: '无'
+            citylevel: '无',
           },
           success: function (res) {
             loadingInstance.close()
@@ -450,7 +485,7 @@
           url: this.$store.state.Server + '/buildingPrice/pricehistorynew/citypricehistory',
           data: {
             city: self.currentLocationInfo.locationName,
-            regionName: regionName
+            citylevel: regionName,
           },
           success: function (res) {
             loadingInstance.close()
@@ -544,7 +579,7 @@
             type: 'bar',
             itemStyle: {
               normal: {
-                color: '#00ae66'
+                color: '#ebb563'
               }
             },
             data: prices,
@@ -836,6 +871,8 @@
       }
     },
     mounted: function () {
+
+
       this.initData()
 //      this.$nextTick(() => {
 //
@@ -852,11 +889,10 @@
 
   .mainContent {
     margin: 0 auto;
-    height: 100%;
+
     padding-left: 1rem;
     padding-right: 1rem;
     width: 1180px;
-    overflow-y: scroll;
 
     /*background-color: #0e90d2;*/
   }
@@ -888,7 +924,8 @@
 
   #priceAnalysis {
     text-align: center;
-    height: 100%;
+    flex: 1;
+    overflow-y: scroll;
     z-index: 3;
   }
 
@@ -996,12 +1033,13 @@
 
     display: inline-block;
     margin-left: 1rem;
-
+    cursor: pointer;
     height: 10rem;
     width: 25rem;
   }
 
   #priceAnalysis .buildName {
+    cursor: pointer;
     display: inline-block;
     max-width: 75%;
     font-size: 20px;
@@ -1076,7 +1114,7 @@
   }
 
   #priceAnalysis .buildingsPagincation {
-    height: 6rem;
+    height: 2rem;
   }
 
   #priceAnalysis .top-btn {

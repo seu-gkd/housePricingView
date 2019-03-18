@@ -58,8 +58,7 @@
       </el-menu-item>
     </el-menu>
     <div id="app">
-
-      <router-view/>
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -82,20 +81,26 @@
   #app {
     font-family: '微软雅黑', Helvetica, Arial, sans-serif;
     height: 100%;
-    min-width: 1150px;
+
     -webkit-font-smoothing: antialiased;
   }
 
+  body {
+    min-width: 1150px;
+
+  }
   .main-page-footer {
+    padding-top: 30px;
+
     display: block;
     text-align: center;
     font-size: 13px;
-    height: 50px;
+    height: 90px;
     vertical-align: bottom;
     z-index: 2;
     position: relative;
-    color: white;
-    background-image: url('components/images/footer-bg.jpg');
+    background-color: #f5f5f5;
+
   }
 
   .logo {
@@ -109,7 +114,8 @@
   }
 
   .el-menu {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3);
+    /*background-color: #ebb563;*/
     width: 100%;
     height: 60px;
     position: absolute;
@@ -161,7 +167,7 @@
     top: 0;
     left: 0;
     overflow: hidden;
-    background-color: #fff;
+    background-color: #f5f5f5;
     width: calc(100%);
     width: -webkit-calc(100%);
     height: calc(100%);
@@ -174,7 +180,7 @@
   .sub-route {
     height: 100%;
     width: 100%;
-    position: absolute;
+    /*position: absolute;*/
     overflow: hidden;
     overflow-y: scroll;
   }

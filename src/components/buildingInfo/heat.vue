@@ -3,69 +3,10 @@
   <div class="sub-route">
     <router-view></router-view>
     <section class="app-section" id="heat">
-      <!--<el-menu-->
-      <!--:default-active="$store.state.activeIndex"-->
-      <!--class="el-menu"-->
-      <!--mode="horizontal"-->
-
-      <!--text-color="#fff"-->
-
-      <!--active-text-color="#fff">-->
-      <!--<div class="logo">-->
-      <!--<div class="logoTitle">GKD</div>-->
-      <!--<div class="subTitle">搞得快一点</div>-->
-      <!--</div>-->
-      <!--<span class="CurrentLocation el-icon-location-outline">{{currentLocation}}</span>-->
-      <!--<el-menu-item class="elItem" index="1">-->
-      <!--主页-->
-      <!--</el-menu-item>-->
-      <!--<el-menu-item class="elItem" index="2" @click="go('2')">-->
-      <!--房价统计-->
-      <!--</el-menu-item>-->
-      <!--<el-menu-item class="elItem" index="3" @click="go('3')">-->
-      <!--<router-link style="text-decoration: none" to="/priceAnalysis">房价预测</router-link>-->
-      <!--</el-menu-item>-->
-      <!--<div class="account-admin" v-if="currentUserInfo!=''">-->
-      <!--<span class="top-btn">-->
-      <!--<el-dropdown style="cursor:pointer;" :show-timeout="0">-->
-      <!--<span class="el-dropdown-link" style="color:#fff;">-->
-      <!--{{currentUserInfo}}<i class="el-icon-caret-bottom el-icon&#45;&#45;right"></i>-->
-      <!--</span>-->
-      <!--<el-dropdown-menu slot="dropdown">-->
-      <!--<div style="padding:5px 10px;">-->
-      <!--<div style="font-size:14px;">-->
-      <!--{{currentUserInfo}}-->
-      <!--<el-tooltip class="item" effect="dark" :content="'最后登录于 ' + lastloginTime" placement="top-end">-->
-      <!--<i class="fa fa-clock-o" aria-hidden="true" style="margin-left:8px;color:#aaa;cursor:pointer;"></i>-->
-      <!--</el-tooltip>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--&lt;!&ndash;<el-dropdown-item divided>&ndash;&gt;-->
-      <!--&lt;!&ndash;<div @click="toPath('changePass')">修改密码</div>&ndash;&gt;-->
-      <!--&lt;!&ndash;</el-dropdown-item>&ndash;&gt;-->
-      <!--<el-dropdown-item>-->
-      <!--<div>用户中心</div>-->
-      <!--</el-dropdown-item>-->
-      <!--<el-dropdown-item>-->
-      <!--<div @click="logout">退出登录</div>-->
-      <!--</el-dropdown-item>-->
-      <!--</el-dropdown-menu>-->
-      <!--</el-dropdown>-->
-      <!--</span>-->
-      <!--</div>-->
-
-      <!--<el-menu-item class="elItem" style="float: right" index="4" v-if="currentUserInfo==''">-->
-      <!--<router-link to="/signin" style="text-decoration: none">注册</router-link>-->
-      <!--</el-menu-item>-->
-      <!--<el-menu-item class="elItem" style="float: right" index="4" v-if="currentUserInfo==''">-->
-      <!--<router-link to="/login" style="text-decoration: none">登陆</router-link>-->
-      <!--</el-menu-item>-->
-      <!--</el-menu>-->
       <video class="mainImg" autoplay loop poster muted>
         <source :src="require('../videos/HongKong.mp4')" type="video/mp4">
       </video>
       <div style="position:relative;width: 100%;height: 100%; overflow-y: scroll;">
-
         <!--<video  :src="" >-->
         <!--</video>-->
         <div class="mainSearch">
@@ -80,7 +21,8 @@
             </el-option>
           </el-select>
           <el-button
-            style="display: inline;background-color:#00ae66;color:white;border:0px;height:55px;position: relative "
+            round
+            style="display: inline;background-color:#00000050;color:white;border:0px;height:55px;position: relative "
             slot="append" @click="search">
             开始搜索
           </el-button>
@@ -106,7 +48,7 @@
             <div id="container" class="is-always-shadow"></div>
           </el-col>
           <el-col :span="9">
-            <el-card :class="box-card-chart-show" @mouseover.native="panelShow(1)"
+            <el-card class="box-card-chart-show" @mouseover.native="panelShow(1)"
                      @mouseout.native="panelOff(1)">
               <div slot="header" class="clearfix" v-model="currentCityInfo">
                 <span>{{currentCityInfo.cityName}}各区房价条形统计图</span>
@@ -185,7 +127,12 @@
 
 
         <footer class="main-page-footer">
-          CopyRight &copy; 2019 GKD
+          © Copyright©2010-2019 GKD版权所有&nbsp;
+          <div><a target="_blank"
+                  href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802024019"
+                  style="display:inline-block;text-decoration:none;height:20px;line-height:20px;margin: 0 auto;text-align: center;">
+
+          </a></div>
         </footer>
       </div>
     </section>
@@ -292,6 +239,15 @@
 //          }
 //        })
 //      },
+      search() {
+
+        this.$router.push({
+          name: 'priceAnalysis',
+          params: {
+            info: this.inputContent
+          }
+        })
+      },
       cityItemClick(regionName) {
 
       },
@@ -558,7 +514,7 @@
 </script>
 
 <style type="text/css">
-  ul, li {
+  ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -590,8 +546,6 @@
     margin-left: 0.5rem;
 
   }
-
-
 
   .box-card-list-show {
 
@@ -715,6 +669,7 @@
   #heat .el-input__inner {
     height: 55px;
     color: white;
+    border: 0px;
     background-color: rgb(0, 0, 0, 0.4);
   }
 
@@ -729,6 +684,7 @@
 
   #heat .hvr-bob {
     width: 33%;
+    display: inline-block;
 
   }
 
@@ -756,6 +712,7 @@
   #heat .count-3 {
     width: 100%;
     height: 100px;
+    display: inline-block;
     margin-top: 20px;
     text-align: center;
   }
@@ -793,9 +750,9 @@
   /*height: auto;*/
   /*width: auto;*/
   /*}*/
-  #heat .el-select-dropdown {
-    min-width: 630px;
-    max-width: 640px;
-  }
+  /*#heat .el-select-dropdown {*/
+  /*min-width: 630px;*/
+  /*max-width: 640px;*/
+  /*}*/
 </style>
 

@@ -11,7 +11,10 @@ a,input{ -webkit-tap-highlight-color:rgba(0,0,0,0);/*ios android去除自带阴�
 input{outline:0px;}
 a, img {/* 禁止长按链接与图片弹出菜单 */-webkit-touch-callout: none; }
 html, body {/* 禁止选中文本(如无文本选中需求,此为必选项) *//*-webkit-user-select: none;  user-select: none;*/}
-html { font-size: 62.5%;} 
+
+html {
+  font-size: 62.5%;
+}
 body { font-size: 14px; font-size: 1.2rem; font-family:"Microsoft YaHei",Helvetica; margin:0; padding:0;background:#2F3143;}
 a{text-decoration: none;}
 
@@ -190,7 +193,11 @@ td,th{ border: 1px #400F49 solid; padding:0 10px; height: 30px; line-height: 30p
     .center .name{max-width:156px;}
 }
 /* sprite */
-.icons{background:url(../images/icons.png) no-repeat; background-size:281px 23px; display:block;}
+.icons {
+  background: url(../images/icons111.png) no-repeat;
+  background-size: 281px 23px;
+  display: block;
+}
 .icon_level_1{height:10px;width:10px;background-position:0 0;}
 .icon_level_2{height:10px;width:10px;background-position:-14px 0;}
 .icon_level_4{height:10px;width:10px;background-position:-30px 0;}

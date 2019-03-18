@@ -82,7 +82,7 @@ const store = new Vuex.Store({
   // 存储状态值
   state: {
     activeIndex: '/',
-    Server: 'http://localhost:9988',
+    Server: 'http://47.101.44.55:9988',
     currentUserInfo: null,
     isLogin: '1',
     currentLocation: '',
@@ -179,7 +179,7 @@ Vue.prototype.logout = function () {
 Vue.prototype.go = function (key) {
   // if (store.state.activeIndex == i)
   //   return
-  router.replace(key)
+  router.push(key)
   // if (i == '1') {
   //   // store.state.activeIndex = '1'
   //   router.replace('/')
@@ -348,7 +348,8 @@ function getCurrentCity() {    //定义获取城市方法
 const LoginOpenList = [
   "/priceAnalysis",
   '/priceForecast',
-  '/userManage'
+  '/userManage',
+  '/buildDetail'
 ]; // 已登录公共权限
 
 

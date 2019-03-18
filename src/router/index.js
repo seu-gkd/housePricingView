@@ -8,6 +8,7 @@ import SignIn from '@/components/login&signin/SignIn.vue'
 import priceAnalysis from '@/components/priceAnalysis/priceAnalysis.vue'
 import priceForecast from '@/components/priceForecast/priceForecast.vue'
 import userManage from '@/components/userManage/userManage.vue'
+import buildDetail from '@/components/priceAnalysis/buildDetail.vue'
 
 Vue.use(Router)
 
@@ -30,7 +31,12 @@ export default new Router({
       {
         path: '/priceAnalysis',
         name: 'priceAnalysis',
-        component: priceAnalysis
+        component: priceAnalysis,
+        children: [{
+          path: '/priceAnalysis/buildDetail',
+          name: 'buildDetail',
+          component: buildDetail
+        }]
       },
       {
         path: '/priceForecast',
@@ -40,7 +46,7 @@ export default new Router({
       {
         path: '/userManage',
         name: 'userManage',
-        compoment: userManage
+        component: userManage
       }
     ]
   },
