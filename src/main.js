@@ -82,7 +82,7 @@ const store = new Vuex.Store({
   // 存储状态值
   state: {
     activeIndex: '/',
-    Server: 'http://47.101.44.55:9988',
+    Server: 'http://localhost:9988',
     currentUserInfo: null,
     isLogin: '1',
     currentLocation: '',

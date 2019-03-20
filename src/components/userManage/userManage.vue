@@ -29,7 +29,7 @@
                            style="background-color:#ebb563"
                            src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3934637875,3708288823&fm=26&gp=0.jpg"
                       />
-                      <div class="buildContent">
+                      <div class="buildContent" @click="itemDetail(item.id)">
                         <div>
                           <div class="buildName">{{item.xiaoqu}}</div>
                           <div class="resblock-location">
@@ -41,10 +41,13 @@
                             <span>建面 {{Math.round(item.area)}}㎡</span>
                           </div>
                           <div class="resblock-tag">
-                          <span v-for="(it,index) in item.projectFeatures.split(' ')" :key="index">
-                            {{it}}
-                          </span>
-
+                            <!--<span v-for="(it,index) in item.projectFeatures.split(' ')" :key="index">-->
+                            <!--{{it}}-->
+                            <!--</span>-->
+                            <el-tag class="featureTag" v-for="(it,index) in item.projectFeatures.split(' ')"
+                                    :key="index"
+                                    type="warning">{{it}}
+                            </el-tag>
                           </div>
                           <div class="resblock-price">
                             <div class="main-price">
@@ -113,6 +116,16 @@
       }
     },
     methods: {
+      itemDetail(id) {
+        console.log('asd')
+        this.$router.push({
+
+          path: '/priceAnalysis/buildDetail',
+          query: {
+            id: id
+          }
+        },)
+      },
       initData() {
         this.$store.state.activeIndex = '4'
         this.currentUserInfo = sessionStorage.getItem('userName')
@@ -264,7 +277,7 @@
 
     display: inline-block;
     margin-left: 1rem;
-
+    cursor: pointer;
     height: 10rem;
     width: 25rem;
   }
@@ -331,12 +344,13 @@
 
     display: inline-block;
     height: 30px;
+
     margin-right: 10px;
     padding: 0 12px;
     line-height: 30px;
     font-size: 12px;
-    color: #849aae;
-    background: rgba(132, 154, 174, .1)
+    /*color: #849aae;*/
+    /*background: rgba(132, 154, 174, .1)*/
   }
 
   #userManage .buildingsPagincation {

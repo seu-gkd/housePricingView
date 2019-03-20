@@ -1,8 +1,7 @@
 <template>
   <div>
-    <el-collapse-transition>
-      <router-view></router-view>
-    </el-collapse-transition>
+
+    <router-view></router-view>
     <div class="sub-route">
 
       <section class="app-section" id="priceAnalysis">
@@ -123,9 +122,13 @@
                               <span>建面 {{Math.round(item.area)}}㎡</span>
                             </div>
                             <div class="resblock-tag">
-                          <span v-for="(it,index) in item.projectfeatures.split(' ')" :key="index">
-                            {{it}}
-                          </span>
+                              <el-tag class="featureTag" v-for="(it,index) in item.projectfeatures.split(' ')"
+                                      :key="index"
+                                      type="warning">{{it}}
+                              </el-tag>
+                              <!--<span  v-for="(it,index) in item.projectfeatures.split(' ')" :key="index">-->
+                              <!--{{it}}-->
+                              <!--</span>-->
 
                             </div>
                             <div class="resblock-price">
@@ -300,9 +303,8 @@
       itemDetail(id) {
         console.log('asd')
         this.$router.push({
-          name: 'buildDetail',
           path: '/priceAnalysis/buildDetail',
-          params: {
+          query: {
             id: id
           }
         },)
@@ -1105,8 +1107,8 @@
     padding: 0 12px;
     line-height: 30px;
     font-size: 12px;
-    color: #849aae;
-    background: rgba(132, 154, 174, .1)
+    /*color: #849aae;*/
+    /*background: rgba(132, 154, 174, .1)*/
   }
 
   #priceAnalysis {
@@ -1131,4 +1133,6 @@
     min-width: 300px;
     max-width: 320px;
   }
+
+
 </style>
