@@ -99,16 +99,147 @@
                 </el-col>
                 <el-col :span="18" v-show="!showCityInfo">
                   <el-card
-                    style="background-color:#ebb563;height: 3.5rem;text-align: left;color:white;font-size: 22px;vertical-align: middle">
+                    class="regionInfoCard">
                     {{currentRegion}}区楼盘信息
+
                   </el-card>
                   <el-card class="buildingList" id="buildingBinding">
+                    <el-row :gutter="20">
+                      <el-col :span="12" style="padding-left: 5%">
+                        <div class="first-pay-nav">按单价<i>(元/平)</i></div>
+                        <div style="width:40%;">
+                          <ul class="list-container" style="left: 0px;">
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 12px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 12px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 28px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 32px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 44px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 44px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 60px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 40px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 60px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 52px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 28px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 36px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 20px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 24px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 28px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 24px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 28px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 36px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 8px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 12px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 8px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 8px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
+                          </ul>
+                        </div>
+                        <div style="margin-top:90px">
+                          <el-slider
+                            class="priceSlider"
+                            @change="handlePriceArea"
+                            v-model="priceRange"
+                            range
+
+                            :max="100000">
+                          </el-slider>
+                        </div>
+                        <div style="text-align: left;margin-bottom: 20px">
+                          <span class="priceSelectLabel">拖动按钮选择售价</span>
+                          <el-input class="priceSelectInput" v-model="priceRange[0]"></el-input>
+                          ~&nbsp;
+                          <el-input class="priceSelectInput" v-model="priceRange[1]"></el-input>
+                        </div>
+                      </el-col>
+                      <el-col :span="12">
+                        <div class="first-pay-nav">按面积<i>(平)</i></div>
+                        <div style="width:40%;">
+                          <ul class="list-container" style="left: 0px;">
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 12px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 12px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 32px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 44px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 6px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 60px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 36px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 24px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 24px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 9px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 8px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 3px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
+                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
+                          </ul>
+                        </div>
+                        <div style="margin-top:90px">
+                          <el-slider
+                            class="priceSlider"
+
+                            v-model="areaRange"
+                            range
+                            @change="handlePriceArea"
+                            :max="1000">
+                          </el-slider>
+                        </div>
+                        <div style="text-align: left;margin-bottom: 20px">
+                          <span class="priceSelectLabel">拖动按钮选择面积</span>
+                          <el-input class="priceSelectInput" v-model="areaRange[0]"></el-input>
+                          ~&nbsp;
+                          <el-input class="priceSelectInput" v-model="areaRange[1]"></el-input>
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <div class="line"></div>
                     <div>
                       <div class="buildingItem" v-for="item in buildingsByRegion.buildings" :key="item.id"
                       >
                         <img class="buildImg"
                              style="background-color:#ebb563"
-                             src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3934637875,3708288823&fm=26&gp=0.jpg"
+                             :src="'https://ke-image.ljcdn.com/'+item.url+'!m_fill,w_1000,l_fbk'"
                         />
                         <div class="buildContent" @click="itemDetail(item.id)">
                           <div>
@@ -134,7 +265,7 @@
                             <div class="resblock-price">
                               <div class="main-price">
 
-                                <span class="number">{{item.price}}</span>
+                                <span class="number1">{{item.price}}</span>
                                 <span class="desc">&nbsp;元/平(均价)</span>
 
                               </div>
@@ -223,6 +354,9 @@
     name: 'priceAnalysis',
     data() {
       return {
+        areaRange: [0, 1000],
+        priceRange: [0, 100000],
+        value: '',
         regionForData: [],
         options: [],
         //楼盘列表信息
@@ -300,6 +434,9 @@
 
     },
     methods: {
+      handlePriceArea() {
+        this.getBuildingsByRegion()
+      },
       itemDetail(id) {
         console.log('asd')
         this.$router.push({
@@ -695,21 +832,27 @@
             city: self.currentLocationInfo.locationName,
             pageNo: self.buildingsByRegion.pageNo,
             pageSize: self.buildingsByRegion.pageSize,
-            region: self.currentRegion
+            region: self.currentRegion,
+            startPrice: self.priceRange[0],
+            endPrice: self.priceRange[1],
+            startArea: self.areaRange[0],
+            endArea: self.areaRange[1]
           },
           success: function (res) {
             loadingInstance.close()
+            self.buildingsByRegion.regionpageNo = []
+            self.buildingsByRegion.pageSize = []
+            self.buildingsByRegion.totalPage = []
+            self.buildingsByRegion.totalRecord = []
+            self.buildingsByRegion.buildings = []
             if (res.code === 0) {
               console.log(self.currentRegion)
-              self.buildingsByRegion.regionpageNo = []
-              self.buildingsByRegion.pageSize = []
-              self.buildingsByRegion.totalPage = []
-              self.buildingsByRegion.totalRecord = []
+
               self.buildingsByRegion.regionpageNo = res.data.pageNo
               self.buildingsByRegion.pageSize = res.data.pageSize
               self.buildingsByRegion.totalPage = res.data.totalPage
               self.buildingsByRegion.totalRecord = res.data.totalRecord
-              self.buildingsByRegion.buildings = []
+
               self.buildingsByRegion.buildings = res.data.results
             } else {
               self.$message.error(res.desc)
@@ -886,7 +1029,7 @@
   }
 </script>
 
-<style type="text/css" scoped>
+<style type="text/css">
 
 
   .mainContent {
@@ -894,7 +1037,7 @@
 
     padding-left: 1rem;
     padding-right: 1rem;
-    width: 1180px;
+    width: 80%;
 
     /*background-color: #0e90d2;*/
   }
@@ -927,7 +1070,7 @@
   #priceAnalysis {
     text-align: center;
     flex: 1;
-    overflow-y: scroll;
+    overflow: scroll;
     z-index: 3;
   }
 
@@ -1084,7 +1227,7 @@
     right: 0;
   }
 
-  #priceAnalysis .number {
+  #priceAnalysis .number1 {
     font-family: Tahoma-Bold;
     font-size: 28px;
     line-height: 28px;
@@ -1134,5 +1277,96 @@
     max-width: 320px;
   }
 
+  #priceAnalysis .regionInfoCard {
+    background-color: #ebb563;
+    height: 6.5rem;
+    text-align: left;
+    color: white;
+    font-size: 22px;
+    margin-bottom: 15px;
+    vertical-align: middle
+  }
 
+  #priceAnalysis .list-container {
+    position: relative;
+    height: 60px;
+    margin: 0;
+    width: 300px;
+    padding: 0;
+    font-size: 0;
+  }
+
+  #priceAnalysis .list-item {
+    background: #ebb56390;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+
+  #priceAnalysis .priceSlider {
+    width: 300px;
+    /*background: #ebb563;*/
+    margin: 0;
+    padding: 0;
+
+  }
+
+  #priceAnalysis .el-slider__bar {
+    background-color: #ebb563;
+  }
+
+  #priceAnalysis .el-slider__runway .el-slider__bar {
+    background-color: #ebb563;
+  }
+
+  #priceAnalysis .el-slider__runway {
+    margin-top: 0;
+  }
+
+  #priceAnalysis .el-slider__button {
+    border: 2px solid #ebb563;
+  }
+
+  #priceAnalysis .first-pay-nav {
+    float: left;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  #priceAnalysis .first-pay-nav i {
+    margin-left: 5px;
+    font-size: 12px;
+    color: #666;
+    vertical-align: bottom;
+    text-decoration: none;
+    font-weight: 300;
+  }
+
+  #priceAnalysis .priceSelectLabel {
+    font-size: 12px;
+    color: #9c9fa1;
+    vertical-align: bottom;
+    margin-right: 10px;
+    user-select: none;
+  }
+
+  #priceAnalysis .priceSelectInput .el-input__inner {
+    text-align: center;
+    width: 80px;
+    font-size: 13px;
+    height: 30px;
+  }
+
+  #priceAnalysis .priceSelectInput {
+    width: 85px;
+
+  }
+
+  #priceAnalysis .line {
+    margin: 0 auto;
+    margin-bottom: 20px;
+    width: 98%;
+    height: 1px;
+    background-color: #e4e6f0;
+  }
 </style>

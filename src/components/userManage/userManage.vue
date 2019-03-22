@@ -52,7 +52,7 @@
                           <div class="resblock-price">
                             <div class="main-price">
 
-                              <span class="number">{{item.price}}</span>
+                              <span class="number1">{{item.price}}</span>
                               <span class="desc">&nbsp;元/平(均价)</span>
 
                             </div>
@@ -77,7 +77,7 @@
               </el-card>
             </el-tab-pane>
             <el-tab-pane>
-              <span slot="label"><i class="el-icon-star-off"></i> 我的资料</span>
+              <span slot="label"><i class=""></i> 我的资料</span>
               <div></div>
             </el-tab-pane>
 
@@ -214,7 +214,7 @@
     /*height: 100%;*/
     padding-left: 1rem;
     padding-right: 1rem;
-    width: 1180px;
+    width: 80%;
     border-radius: 10px;
 
     /*overflow-y: scroll;*/
@@ -325,7 +325,7 @@
     right: 0;
   }
 
-  #userManage .number {
+  #userManage .number1 {
     font-family: Tahoma-Bold;
     font-size: 28px;
     line-height: 28px;
@@ -355,5 +355,9 @@
 
   #userManage .buildingsPagincation {
     height: 30px;
+  }
+
+  #userManage .el-tabs__item.is-active {
+    color: #ebb563;
   }
 </style>

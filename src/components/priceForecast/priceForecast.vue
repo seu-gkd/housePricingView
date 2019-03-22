@@ -27,6 +27,7 @@
             </div>
           </el-card>
           <el-card class="chartView" id="chartView">
+            <div id="preChartLiMeng"></div>
             <div id="historyPriceChart"></div>
             <div id="historyPriceRateChart"></div>
           </el-card>
@@ -63,7 +64,8 @@
         currentLocation: '',
         region: '',
         options: [],
-        priceHistory: []
+        priceHistory: [],
+        priceHistoryLiMeng: []
       }
     },
     methods: {
@@ -72,7 +74,8 @@
         let tagName = this.region.join('-')
         if (this.dynamicTags.indexOf(tagName) < 0) {
           this.dynamicTags.push(tagName)
-          this.getHistoryData(tagName)
+          this.getPreDataByLiMeng(tagName)
+//          this.getHistoryData(tagName)
         }
 
       },
@@ -82,6 +85,180 @@
         if (index > -1)
           this.dynamicTags.splice(index, 1)
         this.delLine(tag)
+      },
+      getPreDataByLiMeng(tag) {
+        let data = this.handletag(tag)
+        let self = this
+        let loadingInstance = Loading.service({target: document.getElementById('chartView')});
+        jQuery.ajax({
+          type: 'GET',
+//          dataType:"jsonp",
+          headers: {
+//            Authorization: localStorage.getItem('token')
+          },
+          url: 'http://47.101.44.55:5000/tsa/' + encodeURIComponent(data.province + '&' + data.city + '&' + data.citylevel),
+//          url: self.$store.state.SUB_INTERFAVE_URL.GET_CHECKCODE,
+          data: {},
+          success: function (res) {
+            res = JSON.parse(res)
+            console.log(res)
+
+            loadingInstance.close()
+            if (res.code === 0) {
+              let temp = {
+                tagName: tag,
+                priceList: {
+                  time: [],
+                  price: [],
+//                  proportion: []
+                }
+              }
+//              if (res.data.priceHistory.length < 111) {
+//                for (let i = 0; i < (111 - res.data.priceHistory.length); i++) {
+//                  temp.priceList.price.push('')
+////                  temp.priceList.proportion.push('')
+//                }
+
+//              }
+              res.data.priceHistory.forEach((item) => {
+                temp.priceList.time.push(item.time)
+                temp.priceList.price.push(item.price.price)
+//                temp.priceList.proportion.push(item.proportion)
+              })
+
+              self.priceHistory.push(temp)
+//              self.getPredictData(tag, self)
+//              self.showHistoryPriceChart()
+//              self.showHistoryPriceRateChart()
+              self.showHistoryPriceChart()
+//              self.showHistoryPriceRateChart()
+            }
+            else {
+              self.$message.error(res.msg)
+            }
+          },
+          error: function () {
+            loadingInstance.close()
+            self.$message.error('网络错误，请重试')
+          }
+        })
+      },
+      showPreLiMeng() {
+
+        let myChart = echarts.init(document.getElementById('preChartLiMeng'));
+        myChart.setOption(option = {
+          title: {
+            text: 'Confidence Band',
+            subtext: 'Example in MetricsGraphics.js',
+            left: 'center'
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'cross',
+              animation: false,
+              label: {
+                backgroundColor: '#ccc',
+                borderColor: '#aaa',
+                borderWidth: 1,
+                shadowBlur: 0,
+                shadowOffsetX: 0,
+                shadowOffsetY: 0,
+                textStyle: {
+                  color: '#222'
+                }
+              }
+            },
+            formatter: function (params) {
+              return params[2].name + '<br />' + params[2].value;
+            }
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'category',
+            data: data.map(function (item) {
+              return item.date;
+            }),
+            axisLabel: {
+              formatter: function (value, idx) {
+                var date = new Date(value);
+                return idx === 0 ? value : [date.getMonth() + 1, date.getDate()].join('-');
+              }
+            },
+            splitLine: {
+              show: false
+            },
+            boundaryGap: false
+          },
+          yAxis: {
+            axisLabel: {
+              formatter: function (val) {
+                return (val - base) * 100 + '%';
+              }
+            },
+            axisPointer: {
+              label: {
+                formatter: function (params) {
+                  return ((params.value - base) * 100).toFixed(1) + '%';
+                }
+              }
+            },
+            splitNumber: 3,
+            splitLine: {
+              show: false
+            }
+          },
+          series: [{
+            name: 'L',
+            type: 'line',
+            data: data.map(function (item) {
+              return item.l + base;
+            }),
+            lineStyle: {
+              normal: {
+                opacity: 0
+              }
+            },
+            stack: 'confidence-band',
+            symbol: 'none'
+          }, {
+            name: 'U',
+            type: 'line',
+            data: data.map(function (item) {
+              return item.u - item.l;
+            }),
+            lineStyle: {
+              normal: {
+                opacity: 0
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: '#rrr'
+              }
+            },
+            stack: 'confidence-band',
+            symbol: 'none'
+          }, {
+            type: 'line',
+            data: data.map(function (item) {
+              return item.value + base;
+            }),
+            hoverAnimation: false,
+            symbolSize: 4,
+            itemStyle: {
+              normal: {
+                color: '#c2'
+              }
+            },
+            showSymbol: false
+          }]
+        });
       },
       //初始化页面基本数据
       initData() {
@@ -280,7 +457,7 @@
             name: '预测数据',
             xAxis: '2019-03'
           }, {
-            xAxis: '2019-04'
+            xAxis: '2028-11'
           }]
           datas[0].markArea.data.push(marker)
         })
@@ -435,13 +612,13 @@
     }
   }
 </script>
-<style>
+<style scoped>
   #priceForecast {
     text-align: center;
     height: 100%;
     z-index: 3;
     flex: 1;
-    overflow-y: scroll;
+    overflow: scroll;
   }
 
   /*#priceForecast .el-menu {*/
@@ -460,11 +637,12 @@
     padding-left: 1rem;
     padding-right: 1rem;
     padding-top: 65px;
-    width: 1180px;
+    width: 80%;
   }
 
   #priceForecast .regionSelect {
     width: 100%;
+    text-align: center;
     height: auto;
   }
 

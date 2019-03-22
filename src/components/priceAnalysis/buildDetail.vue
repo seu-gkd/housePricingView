@@ -5,7 +5,7 @@
       <div style="width:100%;height: 100%;">
         <div class="mainContent">
 
-          <el-card style="margin:0 auto;width:1000px;text-align: center" body-style="padding:0px">
+          <el-card style="margin:0 auto;width:100%;text-align: center" body-style="padding:0px">
             <div class="buildTitle">{{buildInfo.xiaoqu}}
               <el-tag class="colTag" type="warning">访问量：{{parseInt(coll.browsenum)}}次</el-tag>
               <el-tag class="colTag" type="warning">收藏量：{{parseInt(coll.collectnum)}}次</el-tag>
@@ -13,12 +13,13 @@
               <!--<span class="col">访问量: <span>{{parseInt(coll.browsenum)}}</span>人</span>-->
             </div>
             <div class="region">{{buildInfo.city}}-{{buildInfo.region}}</div>
-            <el-carousel style="width:100%" height="472px" :interval="5000" loop>
-              <el-carousel-item v-for="item in 4" :key="item">
+            <el-carousel style="width:100%" height="500px" :interval="5000" loop>
+              <el-carousel-item v-for="item in picList" :key="item">
 
                 <img style="width:100%;height:100%"
-                     data-src="https://ke-image.ljcdn.com/newhouse-baichuan-image/a964996a5f6882f872d6d42f4411a43f.jpg!m_fill,w_1000,l_fbk"
-                     src="https://ke-image.ljcdn.com/newhouse-baichuan-image/a964996a5f6882f872d6d42f4411a43f.jpg!m_fill,w_1000,l_fbk"/>
+
+                     :src="'https://ke-image.ljcdn.com/'+item.pic+'!m_fill,w_1000,l_fbk'"
+                />
 
               </el-carousel-item>
             </el-carousel>
@@ -185,6 +186,9 @@
     name: 'buildDetail',
     data: function () {
       return {
+        picList: {
+          pic: ''
+        },
         coll: {
           xiaoquid: '',
           collectnum: '',
@@ -314,6 +318,7 @@
             if (res.code === 0) {
               self.buildInfo = res.data.buildInfo
               self.coll = res.data.coll
+              self.picList = res.data.picList;
               self.getUserIsCollected()
             } else {
               self.$message.error(res.desc)
@@ -343,6 +348,7 @@
             if (res.code === 0) {
               self.isCollected = true
               self.$message.success('收藏成功')
+              self.getUserIsCollected()
             } else {
               self.$message.error(res.desc)
             }
@@ -375,13 +381,13 @@
     padding-right: 1rem;
     text-align: center;
     padding-top: 75px;
-    width: 1000px;
+    width: 70%;
   }
 
   #buildDetail .buildInfoCard {
     margin: 0 auto;
     margin-top: 15px;
-    width: 1000px;
+    width: 100%;
   }
 
   #buildDetail .buildTitle {
