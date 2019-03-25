@@ -19,8 +19,11 @@
                                                       v-model="userinformation.password">
       <div class="log-btn" @click="login">登录</div>
     </div>
-    <!--<Loading v-if="isLoging" marginTop="-30%"></Loading>-->
-    <footer style="text-align: center;font-size: 13px;">
+    <router-link to="/forget"
+                 style="text-decoration:none;float: right;font-size: 13px;display: block;width:100%;text-align: right;margin-right: 40px;margin-bottom: 20px">
+      忘记密码？
+    </router-link>
+    <footer style="text-align: center;font-size: 13px;display: block;margin-bottom: 10px">
       CopyRight &copy; 2019 GKD
     </footer>
   </div>
@@ -84,8 +87,12 @@
                 self.$message.success('欢迎登录')
                 self.$router.replace('/');
 //                self.$router.go(0)
+              } else if (res.code === 5) {
+                self.$message.success('密码错误！')
+              } else if (res.code === 13) {
+                self.$message.success('用户不存在！')
               } else {
-                self.$message.error(res.msg)
+                self.$message.error(res.desc)
               }
             },
             error: function () {

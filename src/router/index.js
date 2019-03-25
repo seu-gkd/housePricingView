@@ -9,6 +9,8 @@ import priceAnalysis from '@/components/priceAnalysis/priceAnalysis.vue'
 import priceForecast from '@/components/priceForecast/priceForecast.vue'
 import userManage from '@/components/userManage/userManage.vue'
 import buildDetail from '@/components/priceAnalysis/buildDetail.vue'
+import Forget from '@/components/login&signIn/Forget.vue'
+import updatePassword from '@/components/login&signIn/updatePassword.vue'
 
 Vue.use(Router)
 
@@ -27,6 +29,15 @@ export default new Router({
         path: '/signin',
         name: 'signin',
         component: SignIn
+      }, {
+        path: '/forget',
+        name: 'forget',
+        component: Forget
+      },
+      {
+        path: '/updatePassword',
+        name: 'updatePassword',
+        component: updatePassword
       },
       {
         path: '/priceAnalysis',

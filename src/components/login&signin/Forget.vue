@@ -9,31 +9,31 @@
       <div class="log-cloud cloud3"></div>
       <div class="log-cloud cloud4"></div>
 
-      <div class="log-logo">用户注册</div>
+      <div class="log-logo">邮箱验证</div>
       <div class="log-text">@GKD</div>
     </div>
     <div class="log-email" v-model="userinfo">
       <el-input class="signin-input" v-model="userinfo.account"
                 type="email"
-                placeholder="请输入邮箱">
-        <el-button style="display: inline;" slot="append" icon="el-icon-message" @click="sendEmail"></el-button>
+                placeholder="请输入您的注册邮箱">
+        <el-button style="display: inline;" slot="append" icon="el-icon-message" @click="checkUserExist"></el-button>
       </el-input>
-      <el-input type="password" class="signin-input" v-model="userinfo.password1"
+      <!--<el-input type="password" class="signin-input" v-model="userinfo.password1"-->
 
-                placeholder="请输入密码">
+      <!--placeholder="请输入密码">-->
 
-      </el-input>
-      <el-input type="password" class="signin-input" v-model="userinfo.password2"
+      <!--</el-input>-->
+      <!--<el-input type="password" class="signin-input" v-model="userinfo.password2"-->
 
-                placeholder="请再次输入密码">
+      <!--placeholder="请再次输入密码">-->
 
-      </el-input>
+      <!--</el-input>-->
       <el-input class="signin-input" v-model="userinfo.checkCode"
 
                 placeholder="请输入邮件激活码">
 
       </el-input>
-      <a class="log-btn" @click="sign">注&nbsp 册</a>
+      <a class="log-btn" @click="checkValidCode">提&nbsp 交</a>
     </div>
     <!--<Loading v-if="isLoging" style="margin-top: -30rem;z-index: 50"></Loading>-->
   </div>
@@ -44,7 +44,7 @@
   import {Loading} from 'element-ui'
 
   export default {
-    name: 'signin',
+    name: 'forget',
 
     data() {
       return {
@@ -63,6 +63,41 @@
 
     },
     methods: {
+      checkUserExist() {
+        let regEmail = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/
+        if (!regEmail.test(this.userinfo.account)) {
+          this.$message.error('请输入正确的邮箱格式')
+          return
+        }
+//        this.isLoging = true
+        let loadingInstance = Loading.service({fullscreen: true});
+        let self = this
+        jQuery.ajax({
+          type: 'get',
+          headers: {
+//            Authorization: localStorage.getItem('token')
+          },
+          url: this.$store.state.Server + '/PersonUser/personUser/info',
+//          url: self.$store.state.SUB_INTERFAVE_URL.GET_CHECKCODE,
+          data: {
+            username: self.userinfo.account
+          },
+          success: function (res) {
+            loadingInstance.close()
+            self.isLoging = false
+            if (res.code === 0) {
+              self.sendEmail()
+            } else {
+              self.$message.error('用户不存在！')
+            }
+          },
+          error: function () {
+            loadingInstance.close()
+            self.isLoging = false
+            self.$message.error('网络错误，请重试')
+          }
+        })
+      },
       sendEmail() {
         let regEmail = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/
         if (!regEmail.test(this.userinfo.account)) {
@@ -101,17 +136,30 @@
       }
 
       ,
+      checkValidCode() {
+        let regEmail = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/
+        if (!regEmail.test(this.userinfo.account)) {
+          this.$message.error('请输入正确的邮箱格式')
+          return
+
+        } else if (this.userinfo.checkCode == '' || this.userinfo.checkCode != this.trueCheckCode) {
+          this.$message.error('邮箱验证码错误')
+          return
+        } else {
+          this.$router.push({
+            name: 'updatePassword',
+            query: {
+              email: this.userinfo.account
+            }
+          })
+        }
+      },
       sign() {
         let regEmail = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/
         if (!regEmail.test(this.userinfo.account)) {
           this.$message.error('请输入正确的邮箱格式')
           return
-        } else if (this.userinfo.password1 == '' || this.userinfo.password2 == '' || this.userinfo.password1 != this.userinfo.password2) {
-          this.$message.error('两次输入密码不一致或为空')
-          return
-        } else if (this.userinfo.checkCode == '' || this.userinfo.checkCode != this.trueCheckCode) {
-          this.$message.error('邮箱验证码错误')
-          return
+
         }
         this.isLoging = true
         let loadingInstance = Loading.service({fullscreen: true});
@@ -134,7 +182,7 @@
               self.goBack()
               self.$message.success('注册成功')
             } else {
-              self.$message.error(res.desc)
+              self.$message.error(res.msg)
             }
           },
           error: function () {

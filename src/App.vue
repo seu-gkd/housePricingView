@@ -17,7 +17,7 @@
       </el-menu-item>
       <el-menu-item index="/priceAnalysis" @click="go('/priceAnalysis')">房价统计</el-menu-item>
       <el-menu-item index="/priceForecast" @click="go('/priceForecast')">房价预测</el-menu-item>
-
+      <!--<el-menu-item index="/priceForecast" @click="go('/mapLayout')">地图房价</el-menu-item>-->
 
       <div class="account-admin" v-if="this.$store.state.currentUserInfo!=null">
         <span class="top-btn">
@@ -50,10 +50,10 @@
       <!--<el-menu-item style="float: right;margin-right: 3rem;" index="4" v-if="currentUserInfo!=''">-->
       <!--<router-link to="">用户中心</router-link>-->
       <!--</el-menu-item>-->
-      <el-menu-item style="float: right;margin-right: 3rem;" index="4" v-if="this.$store.state.currentUserInfo==null">
+      <el-menu-item style="float: right;margin-right: 3%;" index="4" v-if="this.$store.state.currentUserInfo==null">
         <router-link to="/signin" style="text-decoration: none">注册</router-link>
       </el-menu-item>
-      <el-menu-item style="float: right;margin-right: 3rem;" index="5" v-if="this.$store.state.currentUserInfo==null">
+      <el-menu-item style="float: right;margin-right: 3%;" index="5" v-if="this.$store.state.currentUserInfo==null">
         <router-link style="text-decoration: none" to="/login">登陆</router-link>
       </el-menu-item>
     </el-menu>
@@ -110,10 +110,12 @@
     vertical-align: middle;
     color: #fff;
     margin-top: 4px;
-    margin-left: 8%;
+    margin-left: 5%;
   }
 
   .el-menu {
+    overflow-x: scroll;
+
     background-color: rgba(0, 0, 0, 0.3);
     /*background-color: #ebb563;*/
     width: 100%;
@@ -128,8 +130,8 @@
 
   }
 
-  .el-menu-item {
-    background-color: transparent;
+  el-menu-item {
+    margin: 0 auto
 
   }
 
@@ -211,6 +213,7 @@
   .account-admin {
     line-height: 60px;
     float: right;
-    margin-right: 20px;
+    width: 200px;
+    margin-right: 2%;
   }
 </style>

@@ -32,7 +32,7 @@
                 </span>
               <span class="subscribe" @click="handleCollect">
                 <div style="background-size: 100%" :class="!isCollected?'icon':'icon2'"></div>
-                <div>{{!isCollected ? '关注' : '取消关注'}}</div>
+                <div>{{!isCollected ? '收藏' : '取消收藏'}}</div>
               </span>
             </div>
             <div class="resblock-tag">

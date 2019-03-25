@@ -9,14 +9,13 @@
       <div class="log-cloud cloud3"></div>
       <div class="log-cloud cloud4"></div>
 
-      <div class="log-logo">用户注册</div>
+      <div class="log-logo">密码修改</div>
       <div class="log-text">@GKD</div>
     </div>
     <div class="log-email" v-model="userinfo">
-      <el-input class="signin-input" v-model="userinfo.account"
+      <el-input class="signin-input" disabled v-model="userinfo.account"
                 type="email"
-                placeholder="请输入邮箱">
-        <el-button style="display: inline;" slot="append" icon="el-icon-message" @click="sendEmail"></el-button>
+                placeholder="请输入邮箱">{{userinfo.account}}
       </el-input>
       <el-input type="password" class="signin-input" v-model="userinfo.password1"
 
@@ -28,12 +27,12 @@
                 placeholder="请再次输入密码">
 
       </el-input>
-      <el-input class="signin-input" v-model="userinfo.checkCode"
+      <!--<el-input class="signin-input" v-model="userinfo.checkCode"-->
 
-                placeholder="请输入邮件激活码">
+      <!--placeholder="请输入邮件激活码">-->
 
-      </el-input>
-      <a class="log-btn" @click="sign">注&nbsp 册</a>
+      <!--</el-input>-->
+      <a class="log-btn" @click="update">提&nbsp 交</a>
     </div>
     <!--<Loading v-if="isLoging" style="margin-top: -30rem;z-index: 50"></Loading>-->
   </div>
@@ -44,7 +43,7 @@
   import {Loading} from 'element-ui'
 
   export default {
-    name: 'signin',
+    name: 'updatePassword',
 
     data() {
       return {
@@ -101,16 +100,13 @@
       }
 
       ,
-      sign() {
+      update() {
         let regEmail = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/
         if (!regEmail.test(this.userinfo.account)) {
           this.$message.error('请输入正确的邮箱格式')
           return
         } else if (this.userinfo.password1 == '' || this.userinfo.password2 == '' || this.userinfo.password1 != this.userinfo.password2) {
           this.$message.error('两次输入密码不一致或为空')
-          return
-        } else if (this.userinfo.checkCode == '' || this.userinfo.checkCode != this.trueCheckCode) {
-          this.$message.error('邮箱验证码错误')
           return
         }
         this.isLoging = true
@@ -121,7 +117,7 @@
           headers: {
 //            Authorization: localStorage.getItem('token')
           },
-          url: this.$store.state.Server + '/PersonUser/personUser/register',
+          url: this.$store.state.Server + '/PersonUser/personUser/update',
           data: {
             email: self.userinfo.account,
             password: self.userinfo.password1
@@ -131,10 +127,11 @@
             loadingInstance.close()
             if (res.code === 0) {
 
-              self.goBack()
-              self.$message.success('注册成功')
+
+              self.$message.success('修改成功')
+              self.$router.replace('/')
             } else {
-              self.$message.error(res.desc)
+              self.$message.error(res.msg)
             }
           },
           error: function () {
@@ -147,9 +144,14 @@
       ,
       goBack() {
         this.$router.go(-1)
-      }
-      ,
-
+      }, initData() {
+        if (this.$route.query.email && this.$route.query.email !== '') {
+          this.userinfo.account = this.$route.query.email
+        }
+      },
+    },
+    mounted() {
+      this.initData()
 
     }
   }

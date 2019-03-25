@@ -607,8 +607,6 @@
       },
       regionHistory() {
         this.locationHistoryData = []
-//        for(let i in this.regionForData){
-//          this.getRegionHistoryData(this.regionForData[i])
 //        }
         this.regionForData.forEach(item => {
           this.getRegionHistoryData(item)
@@ -629,6 +627,9 @@
           success: function (res) {
             loadingInstance.close()
             if (res.code === 0) {
+              if (res.data.priceHistory.length == 0) {
+                self.$message.warning(res.data.city + res.data.citylevel + '历史数据缺失，请选择其他区')
+              }
               let temp = {
                 cityName: '',
                 historyData: {
@@ -1037,7 +1038,8 @@
 
     padding-left: 1rem;
     padding-right: 1rem;
-    width: 80%;
+    overflow-x: scroll;
+    width: 1180px;
 
     /*background-color: #0e90d2;*/
   }

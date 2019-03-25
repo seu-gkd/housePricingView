@@ -74,8 +74,8 @@
         let tagName = this.region.join('-')
         if (this.dynamicTags.indexOf(tagName) < 0) {
           this.dynamicTags.push(tagName)
-          this.getPreDataByLiMeng(tagName)
-//          this.getHistoryData(tagName)
+//          this.getPreDataByLiMeng(tagName)
+          this.getHistoryData(tagName)
         }
 
       },
@@ -457,7 +457,7 @@
             name: '预测数据',
             xAxis: '2019-03'
           }, {
-            xAxis: '2028-11'
+            xAxis: '2019-04'
           }]
           datas[0].markArea.data.push(marker)
         })

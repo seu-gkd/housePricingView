@@ -349,7 +349,8 @@ const LoginOpenList = [
   "/priceAnalysis",
   '/priceForecast',
   '/userManage',
-  '/buildDetail'
+  '/buildDetail',
+
 ]; // 已登录公共权限
 
 
