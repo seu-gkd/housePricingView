@@ -11,6 +11,8 @@ import userManage from '@/components/userManage/userManage.vue'
 import buildDetail from '@/components/priceAnalysis/buildDetail.vue'
 import Forget from '@/components/login&signIn/Forget.vue'
 import updatePassword from '@/components/login&signIn/updatePassword.vue'
+import lookingFor from '@/components/lookingFor/lookingFor.vue'
+import mapLayout from '@/components/mapLayout/mapLayout.vue'
 
 Vue.use(Router)
 
@@ -48,6 +50,14 @@ export default new Router({
           name: 'buildDetail',
           component: buildDetail
         }]
+      }, {
+        path: '/lookingFor',
+        name: 'lookingFor',
+        component: lookingFor
+      }, {
+        path: '/mapLayout',
+        name: 'mapLayout',
+        component: mapLayout
       },
       {
         path: '/priceForecast',

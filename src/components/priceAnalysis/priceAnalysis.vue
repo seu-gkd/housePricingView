@@ -1038,7 +1038,7 @@
 
     padding-left: 1rem;
     padding-right: 1rem;
-    overflow-x: scroll;
+
     width: 1180px;
 
     /*background-color: #0e90d2;*/

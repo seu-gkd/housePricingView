@@ -314,6 +314,7 @@
         jQuery.ajax({
           type: 'get',
           url: this.$store.state.Server + '/buildingPrice/regioninfo/cityavg',
+
           success: function (res) {
             loadingInstance.close()
             if (res.code === 0) {
@@ -514,30 +515,14 @@
 </script>
 
 <style type="text/css">
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    float: left;
-  }
 
-  html {
-    height: 100%
-  }
-
-  body {
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    font-family: "微软雅黑";
-  }
 
   #heat {
     text-align: center;
 
   }
 
-  #container {
+  #heat #container {
     height: 900px;
     width: 100%;
     border-radius: 2rem;
@@ -547,7 +532,7 @@
 
   }
 
-  .box-card-list-show {
+  #heat .box-card-list-show {
 
     z-index: 2;
 
@@ -562,7 +547,7 @@
     /*transition-duration: 0.5s;*/
   }
 
-  .box-card-chart-show {
+  #heat .box-card-chart-show {
     max-height: 30rem;
     z-index: 2;
     display: inline-block;
@@ -575,7 +560,7 @@
     /*transition-duration: 0.5s;*/
   }
 
-  .box-card-list {
+  #heat .box-card-list {
     min-height: 30rem;
     z-index: 2;
 
@@ -589,7 +574,7 @@
     transition-duration: 0.5s;
   }
 
-  .box-card-chart {
+  #heat .box-card-chart {
     max-height: 30rem;
     z-index: 3;
     position: absolute;
@@ -603,7 +588,7 @@
     transition-duration: 0.5s;
   }
 
-  .left-title {
+  #heat .left-title {
     font-size: 10px;
     margin-bottom: 10px;
     color: gray;
@@ -611,27 +596,27 @@
 
   }
 
-  .left-item {
+  #heat .left-item {
     text-align: center;
     margin-bottom: 10px;
     font-size: 10px;
   }
 
-  .item-name {
+  #heat .item-name {
     color: #003bb3;
   }
 
-  .clearfix {
+  #heat .clearfix {
 
   }
 
-  .v-chart-city {
+  #heat .v-chart-city {
     width: 20rem;
     height: 20rem;
     float: left;
   }
 
-  .v-chart-city.noselect {
+  #heat .v-chart-city.noselect {
     height: 200px;
     width: 200px;
   }

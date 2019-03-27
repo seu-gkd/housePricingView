@@ -13,7 +13,7 @@
               <!--<span class="col">访问量: <span>{{parseInt(coll.browsenum)}}</span>人</span>-->
             </div>
             <div class="region">{{buildInfo.city}}-{{buildInfo.region}}</div>
-            <el-carousel style="width:100%" height="500px" :interval="5000" loop>
+            <el-carousel style="width:100%" height="400px" :interval="5000" loop type="card">
               <el-carousel-item v-for="item in picList" :key="item">
 
                 <img style="width:100%;height:100%"
@@ -24,147 +24,193 @@
               </el-carousel-item>
             </el-carousel>
           </el-card>
-          <el-card class="buildInfoCard">
+          <div>
+            <el-row :gutter="20">
+              <el-col :span="18">
+                <el-card class="buildInfoCard">
 
-            <div style="color:#fe615b">
-              <span class="price">{{buildInfo.price}}</span> 元/平米(均价)
-              <span>
+                  <div style="color:#fe615b">
+                    <span class="price">{{buildInfo.price}}</span> 元/平米(均价)
+                    <span>
                 </span>
-              <span class="subscribe" @click="handleCollect">
+                    <span class="subscribe" @click="handleCollect">
                 <div style="background-size: 100%" :class="!isCollected?'icon':'icon2'"></div>
                 <div>{{!isCollected ? '收藏' : '取消收藏'}}</div>
               </span>
-            </div>
-            <div class="resblock-tag">
-              <el-tag class="featureTag" v-for="(it,index) in buildInfo.projectfeatures.split(' ')" :key="index"
-                      type="warning">{{it}}
-              </el-tag>
-              <!--<span class="tagItem" v-for="(it,index) in buildInfo.projectfeatures.split(' ')" :key="index">-->
-              <!--{{it}}-->
-              <!--</span>-->
+                  </div>
+                  <div class="resblock-tag">
+                    <el-tag class="featureTag" v-for="(it,index) in buildInfo.projectfeatures.split(' ')" :key="index"
+                            type="warning">{{it}}
+                    </el-tag>
 
-            </div>
-            <div class="line"></div>
-            <div class="infoType">基本信息</div>
-            <div class="detailInfo">
-              <el-row :gutter="20">
-                <el-col :span="12">
-                  <div class="infoItem">
-                    <span class="label">物业类型：</span>
-                    <span class="val">{{buildInfo.propertytype}}</span>
                   </div>
-                  <div class="infoItem">
-                    <span class="label">楼盘地址：</span>
-                    <span class="val">{{buildInfo.propertyaddress}}</span>
-                  </div>
-                  <div class="infoItem">
-                    <span class="label">售楼处地址：</span>
-                    <span class="val">{{buildInfo.salesofficeaddress}}</span>
-                  </div>
-                  <div class="infoItem">
-                    <span class="label">开发商：</span>
-                    <span class="val">{{buildInfo.developer}}</span>
-                  </div>
-                  <div class="infoItem">
-                    <span class="label">区域位置：</span>
-                    <span class="val">{{buildInfo.regionallocation}}</span>
-                  </div>
+                  <div class="line"></div>
+                  <div class="infoType">基本信息</div>
+                  <div class="detailInfo">
+                    <el-row :gutter="20">
+                      <el-col :span="12">
+                        <div class="infoItem">
+                          <span class="label">物业类型：</span>
+                          <span class="val">{{buildInfo.propertytype}}</span>
+                        </div>
+                        <div class="infoItem">
+                          <span class="label">楼盘地址：</span>
+                          <span class="val">{{buildInfo.propertyaddress}}</span>
+                        </div>
+                        <div class="infoItem">
+                          <span class="label">售楼处地址：</span>
+                          <span class="val">{{buildInfo.salesofficeaddress}}</span>
+                        </div>
+                        <div class="infoItem">
+                          <span class="label">开发商：</span>
+                          <span class="val">{{buildInfo.developer}}</span>
+                        </div>
+                        <div class="infoItem">
+                          <span class="label">区域位置：</span>
+                          <span class="val">{{buildInfo.regionallocation}}</span>
+                        </div>
 
-                </el-col>
-                <el-col :span="12">
+                      </el-col>
+                      <el-col :span="12">
 
-                  <div class="infoItem">
-                    <span class="label">参考价格：</span>
-                    <span class="val">{{buildInfo.referenceprice}}</span>
-                  </div>
+                        <div class="infoItem">
+                          <span class="label">参考价格：</span>
+                          <span class="val">{{buildInfo.referenceprice}}</span>
+                        </div>
 
-                </el-col>
-              </el-row>
-            </div>
-            <div class="infoType">规划信息</div>
-            <div class="detailInfo">
-              <el-row :gutter="20">
-                <el-col :span="12">
-                  <div class="infoItem">
-                    <span class="label">建筑类型：</span>
-                    <span class="val">{{buildInfo.buildingtype}}</span>
+                      </el-col>
+                    </el-row>
                   </div>
-                  <div class="infoItem">
-                    <span class="label">占地面积：</span>
-                    <span class="val">{{buildInfo.sitearea}}</span>
-                  </div>
-                  <div class="infoItem">
-                    <span class="label">建筑面积：</span>
-                    <span class="val">{{buildInfo.buildingarea}}</span>
-                  </div>
-                  <div class="infoItem">
-                    <span class="label">规划户数：</span>
-                    <span class="val">{{buildInfo.numplan}}</span>
-                  </div>
+                  <div class="infoType">规划信息</div>
+                  <div class="detailInfo">
+                    <el-row :gutter="20">
+                      <el-col :span="12">
+                        <div class="infoItem">
+                          <span class="label">建筑类型：</span>
+                          <span class="val">{{buildInfo.buildingtype}}</span>
+                        </div>
+                        <div class="infoItem">
+                          <span class="label">占地面积：</span>
+                          <span class="val">{{buildInfo.sitearea}}</span>
+                        </div>
+                        <div class="infoItem">
+                          <span class="label">建筑面积：</span>
+                          <span class="val">{{buildInfo.buildingarea}}</span>
+                        </div>
+                        <div class="infoItem">
+                          <span class="label">规划户数：</span>
+                          <span class="val">{{buildInfo.numplan}}</span>
+                        </div>
 
-                  <div class="infoItem">
-                    <span class="label">产权年限：</span>
-                    <span class="val">{{buildInfo.yearofpropertyrights}}</span>
-                  </div>
+                        <div class="infoItem">
+                          <span class="label">产权年限：</span>
+                          <span class="val">{{buildInfo.yearofpropertyrights}}</span>
+                        </div>
 
 
-                </el-col>
-                <el-col :span="12">
-                  <div class="infoItem">
-                    <span class="label">容积率：</span>
-                    <span class="val">{{buildInfo.floorarearatio}}</span>
-                  </div>
-                  <div class="infoItem">
-                    <span class="label">绿化率：</span>
-                    <span class="val">{{buildInfo.landscapingratio}}</span>
-                  </div>
+                      </el-col>
+                      <el-col :span="12">
+                        <div class="infoItem">
+                          <span class="label">容积率：</span>
+                          <span class="val">{{buildInfo.floorarearatio}}</span>
+                        </div>
+                        <div class="infoItem">
+                          <span class="label">绿化率：</span>
+                          <span class="val">{{buildInfo.landscapingratio}}</span>
+                        </div>
 
 
-                </el-col>
-              </el-row>
-            </div>
-            <div class="infoType">配套信息</div>
-            <div class="detailInfo">
-              <el-row :gutter="20">
-                <el-col :span="12">
-                  <div class="infoItem">
-                    <span class="label">物业公司：</span>
-                    <span class="val">{{buildInfo.propertycompany}}</span>
+                      </el-col>
+                    </el-row>
                   </div>
-                  <div class="infoItem">
-                    <span class="label">物业费：</span>
-                    <span class="val">{{buildInfo.propertycosts}}</span>
-                  </div>
-                  <div class="infoItem">
-                    <span class="label">供水方式：</span>
-                    <span class="val">{{buildInfo.watersupplymethod}}</span>
-                  </div>
-                  <div class="infoItem">
-                    <span class="label">车位：</span>
-                    <span class="val">{{buildInfo.parkingspace}}</span>
-                  </div>
+                  <div class="infoType">配套信息</div>
+                  <div class="detailInfo">
+                    <el-row :gutter="20">
+                      <el-col :span="12">
+                        <div class="infoItem">
+                          <span class="label">物业公司：</span>
+                          <span class="val">{{buildInfo.propertycompany}}</span>
+                        </div>
+                        <div class="infoItem">
+                          <span class="label">物业费：</span>
+                          <span class="val">{{buildInfo.propertycosts}}</span>
+                        </div>
+                        <div class="infoItem">
+                          <span class="label">供水方式：</span>
+                          <span class="val">{{buildInfo.watersupplymethod}}</span>
+                        </div>
+                        <div class="infoItem">
+                          <span class="label">车位：</span>
+                          <span class="val">{{buildInfo.parkingspace}}</span>
+                        </div>
 
 
-                </el-col>
-                <el-col :span="12">
-                  <div class="infoItem">
-                    <span class="label">车位配比：</span>
-                    <span class="val">{{buildInfo.parkingratio}}</span>
-                  </div>
-                  <div class="infoItem">
-                    <span class="label">供暖方式：</span>
-                    <span class="val">{{buildInfo.heatingmethod}}</span>
-                  </div>
-                  <div class="infoItem">
-                    <span class="label">供电方式：</span>
-                    <span class="val">{{buildInfo.powersupply}}</span>
+                      </el-col>
+                      <el-col :span="12">
+                        <div class="infoItem">
+                          <span class="label">车位配比：</span>
+                          <span class="val">{{buildInfo.parkingratio}}</span>
+                        </div>
+                        <div class="infoItem">
+                          <span class="label">供暖方式：</span>
+                          <span class="val">{{buildInfo.heatingmethod}}</span>
+                        </div>
+                        <div class="infoItem">
+                          <span class="label">供电方式：</span>
+                          <span class="val">{{buildInfo.powersupply}}</span>
+                        </div>
+
+                      </el-col>
+                    </el-row>
                   </div>
 
-                </el-col>
-              </el-row>
-            </div>
+                </el-card>
+              </el-col>
+              <el-col :span="6" style="height:48rem;overflow-y: scroll">
 
-          </el-card>
+                <el-card class="buildingItem" v-for="item in recommendations" :key="item.id"
+                         @click="itemDetail(item.id)">
+                  <img class="buildImg"
+                       style="background-color:#ebb563"
+                       src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3934637875,3708288823&fm=26&gp=0.jpg"
+                  />
+                  <div class="buildContent" @click="itemDetail(item.id)">
+                    <div>
+                      <div class="buildName">{{item.xiaoqu}}</div>
+                      <div class="resblock-location">
+                        <span>{{item.region}}</span>
+                        <i class="split">/</i>
+                        <span>{{item.propertyaddress}}</span>
+                      </div>
+                      <div class="resblock-area">
+                        <span>建面 {{Math.round(item.area)}}㎡</span>
+                      </div>
+                      <div class="resblock-tag">
+                        <!--<span v-for="(it,index) in item.projectFeatures.split(' ')" :key="index">-->
+                        <!--{{it}}-->
+                        <!--</span>-->
+                        <el-tag class="featureTag" v-for="(it,index) in item.projectfeatures.split(' ')"
+                                :key="index"
+                                type="warning">{{it}}
+                        </el-tag>
+                      </div>
+                      <div class="resblock-price">
+                        <div class="main-price">
+
+                          <span class="number1">{{item.price}}</span>
+                          <span class="desc">&nbsp;元/平(均价)</span>
+
+                        </div>
+
+
+                      </div>
+                    </div>
+                  </div>
+                </el-card>
+
+              </el-col>
+            </el-row>
+          </div>
         </div>
         <footer class="main-page-footer">
           © Copyright©2010-2019 GKD版权所有&nbsp;
@@ -186,6 +232,7 @@
     name: 'buildDetail',
     data: function () {
       return {
+        recommendations: [],
         picList: {
           pic: ''
         },
@@ -232,6 +279,41 @@
       }
     },
     methods: {
+      itemDetail(id) {
+        console.log('asd')
+        this.$router.push({
+
+          path: '/priceAnalysis/buildDetail',
+          query: {
+            id: id
+          }
+        },)
+      },
+      //获取推荐楼盘
+      getRecommendation() {
+        var self = this
+        let loadingInstance = Loading.service({fullscreen: true});
+
+        jQuery.ajax({
+          type: 'post',
+          url: this.$store.state.Server + '/buildingPrice/infodata/getSimilarByOneLoupan',
+          data: this.buildInfo,
+          success: function (res) {
+            loadingInstance.close()
+            if (res.code === 0) {
+              self.recommendations = res.data.results;
+              console.log(self.recommendations)
+            } else {
+              self.$message.error(res.desc)
+            }
+          },
+          error: function () {
+            loadingInstance.close()
+            self.$message.error('操作错误,请稍后重试')
+          }
+        })
+
+      },
       getUserIsCollected() {
         let jwt = sessionStorage.getItem('jwt')
         var self = this
@@ -320,6 +402,7 @@
               self.coll = res.data.coll
               self.picList = res.data.picList;
               self.getUserIsCollected()
+              self.getRecommendation()
             } else {
               self.$message.error(res.desc)
             }
@@ -438,15 +521,23 @@
   }
 
   #buildDetail .resblock-tag {
-    margin-top: 18px;
-    margin-bottom: 60px;
+    margin-top: 10px;
+
+    margin-bottom: 50px;
   }
 
+  #buildDetail .buildingItem .resblock-tag {
+
+  }
+
+  #buildDetail .buildingItem el-tag {
+    display: inline;
+  }
   #buildDetail .tagItem {
     padding: 6px 8px;
     font-size: 13px;
     text-align: center;
-    margin-left: 10px;
+    /*margin-left: 10px;*/
 
     border-radius: 2px;
     color: #849aad;
@@ -511,6 +602,132 @@
 
   #buildDetail .featureTag {
     float: left;
-    margin-left: 10px;
+    margin-left: 0px;
   }
+
+  #buildDetail .buildingItem {
+    text-align: left;
+    line-height: 15px;
+    display: block;
+    width: 20rem;
+    margin-top: 15px;
+    /*height: 2rem;*/
+    margin-bottom: 10px;
+  }
+
+  #buildDetail .buildImg {
+    width: 100%;
+    height: 11rem;
+    display: block;
+
+  }
+
+  #buildDetail .buildContent {
+
+    display: block;
+    margin-left: 1rem;
+    cursor: pointer;
+    height: 10rem;
+    width: 25rem;
+  }
+
+  #buildDetail .buildName {
+    display: inline-block;
+    max-width: 75%;
+    font-size: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 5px;
+  }
+
+  #buildDetail .resblock-location {
+    margin-top: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #666
+  }
+
+  #buildDetail .split {
+
+    margin: 0 8px;
+    font-size: 14px;
+    color: #ccc;
+  }
+
+  #buildDetail .resblock-area {
+    height: 16px;
+    color: #666;
+    margin-top: 10px;
+  }
+
+  #buildDetail .resblock-tag {
+    margin-top: 5px;
+  }
+
+  #buildDetail .resblock-price {
+    position: relative;
+
+    right: 0;
+  }
+
+  #buildDetail .number1 {
+    font-family: Tahoma-Bold;
+    font-size: 28px;
+    color: red;
+    vertical-align: bottom;
+  }
+
+  #buildDetail .desc {
+    font-family: PingFangSC-Semibold;
+    font-size: 14px;
+    color: #d44d38;
+    vertical-align: bottom;
+  }
+
+  #buildDetail .resblock-tag span {
+
+    display: inline-block;
+    height: 30px;
+
+    margin-right: 10px;
+    padding: 0 12px;
+    line-height: 30px;
+    font-size: 12px;
+    /*color: #849aae;*/
+    /*background: rgba(132, 154, 174, .1)*/
+  }
+
+  #buildDetail .buildingsPagincation {
+    height: 30px;
+  }
+
+  #buildDetail .buildingItem .el-card__body {
+    padding: 0px;
+  }
+
+  #buildDetail .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 200px;
+    margin: 0;
+  }
+
+  #buildDetail .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+
+  #buildDetail .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+  }
+
+  #buildDetail .el-carousel__item--card {
+    width: 50%;
+  }
+
 </style>

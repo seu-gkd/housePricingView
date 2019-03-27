@@ -77,6 +77,65 @@
               </el-card>
             </el-tab-pane>
             <el-tab-pane>
+              <span slot="label"><i class=""></i> 楼盘推荐</span>
+              <el-card>
+                <div slot="header">共<span style="color:darkred">{{totalRecord}}</span> 套关注房源</div>
+                <div class="buildingList" id="buildingBinding1">
+                  <div>
+                    <div class="buildingItem" v-for="item in userCollection" :key="item.id"
+                         @click="itemDetail(item.id)">
+                      <img class="buildImg"
+                           style="background-color:#ebb563"
+                           src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3934637875,3708288823&fm=26&gp=0.jpg"
+                      />
+                      <div class="buildContent" @click="itemDetail(item.id)">
+                        <div>
+                          <div class="buildName">{{item.xiaoqu}}</div>
+                          <div class="resblock-location">
+                            <span>{{item.region}}</span>
+                            <i class="split">/</i>
+                            <span>{{item.propertyaddress}}</span>
+                          </div>
+                          <div class="resblock-area">
+                            <span>建面 {{Math.round(item.area)}}㎡</span>
+                          </div>
+                          <div class="resblock-tag">
+                            <!--<span v-for="(it,index) in item.projectFeatures.split(' ')" :key="index">-->
+                            <!--{{it}}-->
+                            <!--</span>-->
+                            <el-tag class="featureTag" v-for="(it,index) in item.projectFeatures.split(' ')"
+                                    :key="index"
+                                    type="warning">{{it}}
+                            </el-tag>
+                          </div>
+                          <div class="resblock-price">
+                            <div class="main-price">
+
+                              <span class="number1">{{item.price}}</span>
+                              <span class="desc">&nbsp;元/平(均价)</span>
+
+                            </div>
+
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="pageNo"
+                    :page-sizes="[5,10, 20, 30]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    class="buildingsPagincation"
+                    :total="totalRecord">
+                  </el-pagination>
+                </div>
+              </el-card>
+            </el-tab-pane>
+            <el-tab-pane>
               <span slot="label"><i class=""></i> 我的资料</span>
               <div></div>
             </el-tab-pane>

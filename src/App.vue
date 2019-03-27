@@ -17,7 +17,8 @@
       </el-menu-item>
       <el-menu-item index="/priceAnalysis" @click="go('/priceAnalysis')">房价统计</el-menu-item>
       <el-menu-item index="/priceForecast" @click="go('/priceForecast')">房价预测</el-menu-item>
-      <!--<el-menu-item index="/priceForecast" @click="go('/mapLayout')">地图房价</el-menu-item>-->
+      <el-menu-item index="/mapLayout" @click="go('/mapLayout')">地图房价</el-menu-item>
+      <el-menu-item index="/lookingFor" @click="go('/lookingFor')">找房</el-menu-item>
 
       <div class="account-admin" v-if="this.$store.state.currentUserInfo!=null">
         <span class="top-btn">
@@ -88,6 +89,24 @@
   body {
     min-width: 1150px;
 
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    float: left;
+  }
+
+  html {
+    height: 100%
+  }
+
+  body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    font-family: "微软雅黑";
   }
   .main-page-footer {
     padding-top: 30px;

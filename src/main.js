@@ -21,8 +21,25 @@ Vue.prototype.$echarts = echarts
 
 import {INTERFACE, ZHIHUI_INTERFACE, SUB_INTERFAVE_URL} from "./namespace";
 import jQuery from "jquery";
-import {VChart, VLine, VArea, VBar, VPie, VPoint, VScale, VAxis, VTooltip, VLegend, VGuide, XButton} from 'vux'
+import {
+  VChart,
+  VLine,
+  VArea,
+  VBar,
+  VPie,
+  VPoint,
+  VScale,
+  VAxis,
+  VTooltip,
+  VLegend,
+  VGuide,
+  XButton,
+  Grid,
+  GridItem
+} from 'vux'
 
+Vue.component('grid', Grid)
+Vue.component('grid-item', GridItem)
 Vue.component('v-chart', VChart)
 Vue.component('v-line', VLine)
 Vue.component('v-area', VArea)
