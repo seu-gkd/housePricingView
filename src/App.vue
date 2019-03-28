@@ -79,10 +79,13 @@
 </script>
 
 <style>
+  .el-menu-item:focus, .el-menu-item:hover {
+    background-color: #00000000
+  }
   #app {
     font-family: '微软雅黑', Helvetica, Arial, sans-serif;
     height: 100%;
-
+    min-width: 1180px;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -99,7 +102,8 @@
   }
 
   html {
-    height: 100%
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
   }
 
   body {
@@ -149,8 +153,14 @@
 
   }
 
-  el-menu-item {
-    margin: 0 auto
+  .el-menu-item {
+    margin: 0 auto;
+
+  }
+
+  li .el-menu-item :hover {
+    margin: 0 auto;
+    background-color: rgba(0, 0, 0, 0.3);
 
   }
 
@@ -235,4 +245,13 @@
     width: 200px;
     margin-right: 2%;
   }
+
+  .el-menu--horizontal > .el-menu-item:not(.is-disabled):focus {
+    background-color: #00000050;
+  }
+
+  .el-menu--horizontal > .el-menu-item:not(.is-disabled):hover {
+    background-color: #00000050;
+  }
+
 </style>

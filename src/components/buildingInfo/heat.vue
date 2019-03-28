@@ -43,86 +43,51 @@
             </li>
           </ul>
         </div>
-        <el-row class="mapLayout" :gutter="20">
-          <el-col :span="15">
-            <div id="container" class="is-always-shadow"></div>
-          </el-col>
-          <el-col :span="9">
-            <el-card class="box-card-chart-show" @mouseover.native="panelShow(1)"
-                     @mouseout.native="panelOff(1)">
-              <div slot="header" class="clearfix" v-model="currentCityInfo">
-                <span>{{currentCityInfo.cityName}}各区房价条形统计图</span>
+        <div style="width: 100%;background: white;">
+          <div class="fl">
+            <div class="name">精品楼盘<span>为你而选</span></div>
+            <div class="subP">好房源那么多，我们为你精选，GKD会越来越懂你</div>
+          </div>
+          <div style="padding-bottom: 50px">
+            <el-card class="buildingItem" v-for="item in recommendations.slice(0,4)" :key="item.Information.id"
+                     @click="itemDetail(item.id)">
+              <img class="buildImg"
+                   style="background-color:#409eff"
+                   :src="'https://ke-image.ljcdn.com/'+item.Picture.pic+'!m_fill,w_1000,l_fbk'"
+              />
+              <div class="buildContent" @click="itemDetail(item.Information.id)">
+                <div>
+                  <div class="buildName">{{item.Information.xiaoqu}}</div>
+                  <div class="resblock-location">
+                    <span>{{item.Information.region}}</span>
+                    <i class="split">/</i>
+                    <span>{{item.Information.propertyaddress}}</span>
+                  </div>
+                  <div class="resblock-area">
+                    <span>建面 {{Math.round(item.Information.area)}}㎡</span>
+                    <div class="resblock-price">
+                      <div class="main-price">
 
-              </div>
-              <v-chart class="v-chart-city" ref="demo"
-                       :data="chartdata"
-                       :width="800"
-                       :height="350">
-                <v-bar/>
-                <v-tooltip :show-item-marker="true"/>
+                        <span class="number1">{{item.Information.price}}</span>
+                        <span class="desc">&nbsp;元/平(均价)</span>
 
-              </v-chart>
-            </el-card>
-            <el-card class="box-card-list-show" @mouseover.native="panelShow(2)"
-                     @mouseout.native="panelOff(2)">
-              <div slot="header" class="clearfix" v-model="currentCityInfo">
-                <span>{{currentCityInfo.cityName}}房价平均数：</span>
-                <span style="color:red;font-size: 23px">{{currentCityInfo.cityPrice}}</span>
-                <span>万元/平方米</span>
-                <!--<el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>-->
-              </div>
-              <el-row :gutter="1" class="left-title">
-                <el-col :span="8">
-                  <div class="grid-content bg-purple">序号</div>
-                </el-col>
-                <el-col :span="8">
-                  <div class="grid-content bg-purple">行政区</div>
-                </el-col>
-                <el-col :span="8">
-                  <div class="grid-content bg-purple">房价(万元/平方米)</div>
-                </el-col>
+                      </div>
 
 
-              </el-row>
-              <div v-for="(item,index) in currentCityInfo.cityRegions" :key="id" class="text item">
-                <el-row :gutter="1" class="left-item">
-                  <el-col :span="8">
-                    <div class="grid-content bg-purple">{{index + 1}}</div>
-                  </el-col>
-                  <el-col :span="8">
-                    <div class="grid-content bg-purple item-name" @click="cityItemClick(item.regionname)">
-                      {{item.regionname}}
                     </div>
-                  </el-col>
-                  <el-col :span="8">
-                    <div class="grid-content bg-purple">{{Math.round(item.avgprice / 100) / 100}}</div>
-                  </el-col>
+                  </div>
+                </div>
+                <!-- <div class="resblock-tag">
 
+                  <el-tag class="featureTag" v-for="(it,index) in item.Information.projectfeatures.split(' ')"
+                          :key="index"
+                          type="primary">{{it}}
+                  </el-tag>
+                </div> -->
 
-                </el-row>
               </div>
             </el-card>
-
-          </el-col>
-        </el-row>
-        <div>
-
-
-          <!--<el-card :class="[leftChartShow?'box-card-chart-show':'box-card-chart']" @mouseover.native="panelShow(1)"-->
-          <!--@mouseout.native="panelOff(1)">-->
-          <!--<div slot="header" class="clearfix" v-model="currentCityInfo">-->
-          <!--<span>{{currentCityInfo.cityName}}各区房价条形统计图</span>-->
-
-          <!--</div>-->
-          <!--<v-chart class="v-chart-city" ref="demo"-->
-          <!--:data="chartdata"-->
-          <!--:width="800"-->
-          <!--:height="350">-->
-          <!--<v-bar/>-->
-          <!--<v-tooltip :show-item-marker="true"/>-->
-
-          <!--</v-chart>-->
-          <!--</el-card>-->
+          </div>
         </div>
 
 
@@ -152,6 +117,7 @@
     name: 'heat',
     data: function () {
       return {
+        recommendations: [],
         mp: '',
         inputContent: '',
         currentLocation: '',
@@ -211,34 +177,42 @@
     },
     computed: {},
     methods: {
-//      logout() {
-//        let self = this
-//        let loadingInstance = Loading.service({fullscreen: true});
-//        jQuery.ajax({
-//          type: 'GET',
-//          headers: {
-////            Authorization: localStorage.getItem('token')
-//          },
-//          url: this.$store.state.Server + '/PersonUser/personUser/logout',
-////          url: self.$store.state.SUB_INTERFAVE_URL.GET_CHECKCODE,
-//          data: {},
-//          success: function (res) {
-//            loadingInstance.close()
-//            if (res.code === 0) {
-//              sessionStorage.setItem('jwt', '')
-//              sessionStorage.setItem('username', '')
-//              self.currentUserInfo = ''
-//              self.$message.success('已退出')
-//            } else {
-//              self.$message.error(res.msg)
-//            }
-//          },
-//          error: function () {
-//            loadingInstance.close()
-//            self.$message.error('网络错误，请重试')
-//          }
-//        })
-//      },
+      itemDetail(id) {
+        this.$router.push({
+          path: '/buildDetail',
+          query: {
+            id: id
+          }
+        },)
+      },
+      //获取推荐楼盘
+      getRecommendation() {
+        var self = this
+        let loadingInstance = Loading.service({fullscreen: true});
+
+        jQuery.ajax({
+          type: 'get',
+          url: this.$store.state.Server + '/buildingPrice/infodata/getAheadLoupan',
+          data: {
+            city: sessionStorage.getItem('currentCity'),
+            region: '无'
+          },
+          success: function (res) {
+            loadingInstance.close()
+            if (res.code === 0) {
+              self.recommendations = res.data;
+
+            } else {
+              self.$message.error(res.desc)
+            }
+          },
+          error: function () {
+            loadingInstance.close()
+            self.$message.error('操作错误,请稍后重试')
+          }
+        })
+
+      },
       search() {
 
         this.$router.push({
@@ -277,9 +251,7 @@
                 map['avgprice'] = Math.round(item.avgprice)
                 self.chartdata.push(map)
               })
-              self.$refs.demo.rerender()
-              //展示所选城市的所有区数据
-              self.showCustomOverlay(2)
+
             }
           },
           error: function () {
@@ -331,11 +303,11 @@
                 self.currentCityInfo.cityRegions.push(map)
               })
               self.currentCityInfo.cityPrice = Math.round(sumPrice / self.currentCityInfo.cityRegions.length / 100) / 100
-              self.$refs.demo.rerender()
+
 //              self.renderVChart()
 
 //              self.chartdata.rows = res.data.results
-              self.showCustomOverlay(2)
+              // self.showCustomOverlay(2)
             }
           },
           error: function () {
@@ -491,8 +463,8 @@
           let city = position.address.city;             //获取城市信息
 //          let province = position.address.province;    //获取省份信息
           self.currentLocation = city.substr(0, city.length - 1)
-
           sessionStorage.setItem('currentCity', city.substr(0, city.length - 1))
+          self.getRecommendation()
         }, function (e) {
         }, {provider: 'baidu'});
       },
@@ -509,16 +481,179 @@
     },
     mounted: function () {
       this.initData()
-      this.showheat()
+      this.getCurrentCity()
     }
   }
 </script>
 
 <style type="text/css">
 
+  #heat .buildingItem .el-card__body {
+    padding: 0px;
+  }
+
+  #heat .buildingItem .resblock-tag {
+
+  }
+
+  #heat .buildingItem el-tag {
+    display: inline;
+  }
+
+  #heat .tagItem {
+    padding: 6px 8px;
+    font-size: 13px;
+    text-align: center;
+    /*margin-left: 10px;*/
+
+    border-radius: 2px;
+    color: #849aad;
+    background: rgba(132, 154, 174, .15);
+  }
+
+  #heat .buildingItem {
+    text-align: left;
+    line-height: 15px;
+    display: inline-block;
+    width: 18rem;
+    margin-top: 15px;
+    margin-right: 10px;
+    /*height: 2rem;*/
+    margin-bottom: 0px;
+  }
+
+  #heat .buildImg {
+    width: 100%;
+    height: 11rem;
+    display: block;
+
+  }
+
+  #heat .buildContent {
+
+    display: block;
+
+    cursor: pointer;
+    height: 6rem;
+    width: 100%;
+  }
+
+  #heat .buildName {
+    margin-left: 1rem;
+    display: inline-block;
+    max-width: 75%;
+    font-size: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 10px;
+  }
+
+  #heat .resblock-location {
+    margin-left: 1rem;
+    margin-top: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #666
+  }
+
+  #heat .split {
+
+    margin: 0 8px;
+    font-size: 14px;
+    color: #ccc;
+  }
+
+  #heat .resblock-area {
+    margin-left: 1rem;
+    height: 16px;
+    color: #666;
+    margin-top: 10px;
+  }
+
+  #heat .resblock-tag {
+    margin-top: 5px;
+  }
+
+  #heat .resblock-price {
+    position: relative;
+    float: right;
+    margin-right: 1rem;
+    margin-bottom: 10px;
+
+  }
+
+  #heat .number1 {
+    font-family: Tahoma-Bold;
+    font-size: 15px;
+    color: #d44d38;
+    vertical-align: bottom;
+  }
+
+  #heat .desc {
+    font-family: PingFangSC-Semibold;
+    font-size: 14px;
+    color: #d44d38;
+    vertical-align: bottom;
+  }
+
+  #heat .resblock-tag span {
+
+    display: inline-block;
+    height: 30px;
+
+    margin-right: 10px;
+    padding: 0 12px;
+    line-height: 30px;
+    font-size: 12px;
+    /*color: #849aae;*/
+    /*background: rgba(132, 154, 174, .1)*/
+  }
+
+  #heat .fl {
+    height: 100px;
+    padding-top: 30px;
+  }
+
+  #heat .fl .name {
+    float: left;
+    display: block;
+    font-weight: 700;
+    width: 90%;
+    text-align: left;
+    font-size: 30px;
+    padding-left: 30px;
+
+  }
+
+  #heat .fl .name span {
+    font-weight: 200;
+    font-size: 30px;
+
+    margin-left: 10px;
+  }
+
+  #heat .fl .subP {
+    text-align: left;
+    float: left;
+    padding-left: 30px;
+
+    display: block;
+    color: #888;
+    margin-top: 10px;
+  }
+
+  #heat .fl p > a {
+
+  }
 
   #heat {
     text-align: center;
+    min-width: 1065px;
 
   }
 

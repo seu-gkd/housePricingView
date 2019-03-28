@@ -5,7 +5,7 @@
         <div class="mainContent">
 
           <div id="container" class="is-always-shadow"></div>
-          <el-button style="position: absolute;z-index: 4;left: 15px;top: 75px" type="warning"
+          <el-button style="position: absolute;z-index: 4;left: 15px;top: 75px" type="primary"
                      icon="el-icon-back" circle
                      v-if="!isShowCities"
                      @click.native="initData()"
@@ -25,7 +25,7 @@
 
               </v-chart>
             </el-card>
-            <el-button style="position: absolute;z-index: 4;right: 0px;top: 47%" type="warning"
+            <el-button style="position: absolute;z-index: 4;right: 0px;top: 47%" type="primary"
                        :icon="leftChartShow==true?'el-icon-arrow-left':'el-icon-arrow-right'" circle
                        @click.native="switchPanel()"
             ></el-button>
@@ -333,7 +333,7 @@
               self.currentCityInfo.cityPrice = ''
 //              self.currentCityInfo.cityRegions = res.data
               let sumPrice = 0
-              res.data.forEach(item => {
+              res.data.slice(0, 20).forEach(item => {
                 let map = {}
                 map['regionname'] = item.cityName
                 map['avgprice'] = Math.round(item.avgPrice)
@@ -367,6 +367,7 @@
 </script>
 <style scoped>
   #mapLayout {
+    overflow: scroll;
     text-align: center;
     height: 100%;
     z-index: 3;
@@ -413,7 +414,7 @@
     height: auto;
     position: absolute;
     overflow-y: scroll;
-    margin-top: 1rem;
+    margin-top: 10rem;
     /*transform: translate(21.5rem, 0);*/
     /*transition-duration: 0.5s;*/
   }
@@ -424,9 +425,9 @@
     display: inline-block;
     position: absolute;
     left: 0px;
-    width: 50%;
+    width: 55rem;
     overflow-x: scroll;
-
+    margin-top: 10rem;
     /*border-radius: 10px;*/
     transform: translate(0, 0);
     transition-duration: 0.5s;
@@ -447,6 +448,7 @@
 
   .box-card-chart {
     max-height: 30rem;
+    margin-top: 10rem;
     z-index: 3;
     position: absolute;
     display: inline;

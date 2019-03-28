@@ -42,14 +42,15 @@ export default new Router({
         component: updatePassword
       },
       {
+        path: '/buildDetail',
+        name: 'buildDetail',
+        component: buildDetail
+      },
+      {
         path: '/priceAnalysis',
         name: 'priceAnalysis',
         component: priceAnalysis,
-        children: [{
-          path: '/priceAnalysis/buildDetail',
-          name: 'buildDetail',
-          component: buildDetail
-        }]
+        children: []
       }, {
         path: '/lookingFor',
         name: 'lookingFor',

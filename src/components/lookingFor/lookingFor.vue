@@ -14,7 +14,7 @@
               change-on-select
               v-model="selected.region"
             ></el-cascader>
-              <!--<el-button type="warning" @click="search" round>查询</el-button>-->
+              <el-button type="primary" @click="search" round>查询</el-button>
             </span></div>
             <div class="selectClass" style="vertical-align: middle">
               <span class="selectTitle">类型</span>
@@ -22,6 +22,7 @@
                 <el-checkbox style="margin-left: 0px;margin-right: 30px;" :indeterminate="isIndeterminate1"
                              v-model="checkAllTypes" @change="handleSelectAllTypes">全选</el-checkbox>
                 <el-checkbox-group
+                  style="margin-left: 59px"
                   @change="handleSelectType"
                   v-model="selected.buildType"
                 >
@@ -180,20 +181,48 @@
                 </div>
               </el-col>
             </el-row>
+            <div>
+              <div class="orderSelect">
+                <el-dropdown @command="handleCommand">
+  <span class="el-dropdown-link" style="padding-left: 54px;">
+    按价格排序<i class="el-icon-arrow-down el-icon--right"></i>
+  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="price asc">升序</el-dropdown-item>
+                    <el-dropdown-item command="price desc">降序</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
+              <div class="orderSelect">
+                <el-dropdown @command="handleCommand">
+  <span class="el-dropdown-link">
+    按面积排序<i class="el-icon-arrow-down el-icon--right"></i>
+  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="area asc">升序</el-dropdown-item>
+                    <el-dropdown-item command="area desc">降序</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
+            </div>
           </el-card>
-          <el-card>
-            <el-row>
-              <el-col :span="24">
-                <div class="buildingList">
-                  <div class="buildingItem" v-for="item in buildingsByParams.buildings" :key="item.id"
-                  >
+
+          <el-card style="margin-top: 15px">
+
+            <div class="buildingList">
+              <div class="buildingItem" v-for="item in buildingsByParams.buildings" :key="item.id"
+              >
+                <el-row>
+                  <el-col :span="7">
                     <img class="buildImg"
-                         style="background-color:#ebb563"
+                         style="background-color:#409eff"
                          :src="'https://ke-image.ljcdn.com/'+item.url+'!m_fill,w_1000,l_fbk'"
                     />
+                  </el-col>
+                  <el-col :span="17">
                     <div class="buildContent" @click="itemDetail(item.id)">
                       <el-row style="width:100%">
-                        <el-col :span="21">
+                        <el-col :span="16">
                           <div>
                             <div class="buildName">{{item.xiaoqu}}</div>
                             <div class="resblock-location">
@@ -202,12 +231,12 @@
                               <span>{{item.propertyaddress}}</span>
                             </div>
                             <div class="resblock-area">
-                              <span>建面 {{Math.round(item.area)}}㎡</span>
+                              <span>建面 {{Math.round(item.area) == 0 ? '暂无信息' : Math.round(item.area)}}㎡</span>
                             </div>
                             <div class="resblock-tag">
                               <el-tag class="featureTag" v-for="(it,index) in item.projectfeatures.split(' ')"
                                       :key="index"
-                                      type="warning">{{it}}
+                                      type="primary">{{it}}
                               </el-tag>
                               <!--<span  v-for="(it,index) in item.projectfeatures.split(' ')" :key="index">-->
                               <!--{{it}}-->
@@ -217,27 +246,23 @@
 
                           </div>
                         </el-col>
-                        <el-col :span="3">
+                        <el-col :span="8" style="height:100%">
                           <div class="resblock-price">
-                            <div class="main-price">
 
-                              <span class="number1">{{item.price}}</span>
-                              <span class="desc">&nbsp;元/平(均价)</span>
 
-                            </div>
+                            <span class="number1">{{item.price == '' ? '价格未定' : item.price}}</span>
+                            <span class="desc">&nbsp;元/平(均价)</span>
 
 
                           </div>
                         </el-col>
                       </el-row>
                     </div>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="0">
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
 
-              </el-col>
-            </el-row>
 
             <el-pagination
               @size-change="handleSizeChange"
@@ -295,10 +320,27 @@
           buildTag: [],
           areaRange: [0, 1000],
           priceRange: [0, 100000],
-        }
+        },
+        orderBy: ''
       }
     },
     methods: {
+      handleCommand(command) {
+        this.orderBy = command
+        this.getBuildingsByParams()
+      },
+      handleSizeChange(val) {
+        this.buildingsByParams.pageSize = val
+        this.getBuildingsByParams()
+
+      },
+      handleCurrentChange(val) {
+        this.buildingsByParams.pageNo = val
+        this.getBuildingsByParams()
+      },
+      search() {
+        this.getBuildingsByParams()
+      },
       handleSelectType(val) {
         this.checkAllTypes = (val.length === this.buildTypes.length);
         this.isIndeterminate1 = val.length > 0 && val.length < this.buildTypes.length
@@ -326,9 +368,8 @@
         this.getBuildingsByParams()
       },
       itemDetail(id) {
-        console.log('asd')
         this.$router.push({
-          path: '/lookingFor/buildDetail',
+          path: '/buildDetail',
           query: {
             id: id
           }
@@ -347,8 +388,8 @@
             startArea: this.selected.areaRange[0],
             endArea: this.selected.areaRange[1],
             projectFeaturesList: this.selected.buildTag,
-            propertyTypeList: this.selected.buildType
-
+            propertyTypeList: this.selected.buildType,
+            orderBy: this.orderBy
           }
         } else
           return {
@@ -361,14 +402,15 @@
             startArea: this.selected.areaRange[0],
             endArea: this.selected.areaRange[1],
             projectFeaturesList: this.selected.buildTag,
-            propertyTypeList: this.selected.buildType
+            propertyTypeList: this.selected.buildType,
+            orderBy: this.orderBy
 
           }
 
       },
       //根据多个条件获取楼盘列表
       getBuildingsByParams() {
-        if (this.selected.region.length <= 1) {
+        if (this.selected.region.length < 1) {
           this.$message.warning('请选择到市及市以下级别')
           return
         }
@@ -503,11 +545,12 @@
     padding-left: 1rem;
     padding-right: 1rem;
     padding-top: 65px;
-    width: 80%;
+    width: 1180px;
+    min-width: 1180px;
   }
 
   #lookingFor .regionInfoCard {
-    background-color: #ebb563;
+    background-color: #409eff;
     height: 6.5rem;
     text-align: left;
     color: white;
@@ -526,25 +569,25 @@
   }
 
   #lookingFor .list-item {
-    background: #ebb56390;
+    background: #409eff90;
     display: inline-block;
     vertical-align: bottom;
   }
 
   #lookingFor .priceSlider {
     width: 300px;
-    /*background: #ebb563;*/
+    /*background: #409eff;*/
     margin: 0;
     padding: 0;
 
   }
 
   #lookingFor .el-slider__bar {
-    background-color: #ebb563;
+    background-color: #409eff;
   }
 
   #lookingFor .el-slider__runway .el-slider__bar {
-    background-color: #ebb563;
+    background-color: #409eff;
   }
 
   #lookingFor .el-slider__runway {
@@ -552,7 +595,7 @@
   }
 
   #lookingFor .el-slider__button {
-    border: 2px solid #ebb563;
+    border: 2px solid #409eff;
   }
 
   #lookingFor .first-pay-nav {
@@ -612,16 +655,16 @@
   }
 
   #lookingFor .is-checked {
-    color: #ebb563;
+    color: #409eff;
   }
 
   #lookingFor .el-checkbox__input.is-checked + .el-checkbox__label {
-    color: #ebb563;
+    color: #409eff;
   }
 
   #lookingFor .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-    background-color: #ebb563;
-    border-color: #ebb563;
+    background-color: #409eff;
+    border-color: #409eff;
   }
 
   #lookingFor .buildingList {
@@ -646,11 +689,12 @@
 
   #lookingFor .buildContent {
 
-    display: inline-block;
+    display: inline;
     margin-left: 1rem;
     cursor: pointer;
     height: 10rem;
-    width: 25rem;
+    width: 100%;
+
   }
 
   #lookingFor .buildName {
@@ -689,26 +733,36 @@
 
   #lookingFor .resblock-tag {
     margin-top: 18px;
+    overflow: hidden;
+    height: 30px;
   }
 
   #lookingFor .resblock-price {
     position: relative;
-
-    right: 0;
+    padding-top: 30px;
+    height: 100%;
+    vertical-align: middle;
+    text-align: left;
+    float: right;
+    margin-right: 10px;
   }
 
   #lookingFor .number1 {
     font-family: Tahoma-Bold;
     font-size: 28px;
     line-height: 28px;
-    color: red;
+    color: #d44d38;
+    float: left;
     vertical-align: bottom;
   }
 
   #lookingFor .desc {
     font-family: PingFangSC-Semibold;
     font-size: 14px;
+    line-height: 37px;
     color: #d44d38;
+    height: 28px;
+    float: right;
     vertical-align: bottom;
   }
 
@@ -730,6 +784,23 @@
 
   #lookingFor .buildingsPagincation {
     height: 2rem;
+  }
+
+  #lookingFor .el-dropdown-link {
+    cursor: pointer;
+
+  }
+
+  #lookingFor .el-icon-arrow-down {
+    font-size: 12px;
+  }
+
+  #lookingFor .orderSelect {
+    float: left;
+    width: 50%;
+    text-align: left;
+    margin-bottom: 20px;
+
   }
 
 </style>

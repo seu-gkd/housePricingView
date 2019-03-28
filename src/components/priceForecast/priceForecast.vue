@@ -13,10 +13,10 @@
               v-model="region"
 
             ></el-cascader>
-            <el-button type="warning" @click="search" round>查询并添加</el-button>
+            <el-button type="primary" @click="search" round>查询并添加</el-button>
             <div class="selectRegions">
               <el-tag
-                type="warning"
+                type="primary"
                 :key="tag"
                 v-for="tag in dynamicTags"
                 closable
@@ -673,6 +673,6 @@
   }
 
   .el-cascader-menu__item.is-active {
-    color: #ebb563;
+    color: #409eff;
   }
 </style>

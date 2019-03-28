@@ -24,32 +24,32 @@
                   </el-option>
 
                 </el-select>
-                <el-button type="warning" style="display: inline;" slot="append" icon="el-icon-search"
+                <el-button type="primary" style="display: inline;" slot="append" icon="el-icon-search"
                            @click="search"></el-button>
               </div>
               <div>区域选择：</div>
-              <el-radio-group fill="#ebb563" size="mini" style="overflow: hidden;overflow-x: hidden;width: 100%"
+              <el-radio-group fill="#409eff" size="mini" style="overflow: hidden;overflow-x: hidden;width: 100%"
                               v-model="currentRegion">
                 <el-radio-button class="regionBtn"
                                  :label="currentLocationInfo.locationName">全{{currentLocationInfo.locationName}}市
                 </el-radio-button>
-                <el-radio-button v-for="region in currentLocationInfo.regionsInfo1" :key="region.regionName"
+                <el-radio-button v-for="region in currentLocationInfo.regionsInfo1" :key="region"
                                  class="regionBtn"
-                                 :label="region.regionName">{{region.regionName}}区
+                                 :label="region">{{region}}区
                 </el-radio-button>
               </el-radio-group>
               <el-radio-group size="mini" style="overflow: hidden;overflow-x: hidden;width: 100%"
                               v-model="currentRegion">
-                <el-radio-button v-for="region in currentLocationInfo.regionsInfo2" :key="region.regionName"
+                <el-radio-button v-for="region in currentLocationInfo.regionsInfo2" :key="region"
                                  class="regionBtn"
-                                 :label="region.regionName">{{region.regionName}}区
+                                 :label="region">{{region}}区
                 </el-radio-button>
               </el-radio-group>
             </el-card>
             <div style="width: 100%;margin-top: 1rem">
               <el-row :gutter="20">
                 <el-col :span="18" v-show="showCityInfo">
-                  <el-card style="background-color:#ebb563;height: 20rem;text-align: left;color:white;font-size: 13px"
+                  <el-card style="background-color:#409eff;height: 20rem;text-align: left;color:white;font-size: 13px"
                            v-model="currentLocationInfo">
                     <div class="clearfix">
                       {{currentLocationInfo.locationName}}
@@ -80,13 +80,13 @@
                         value="无"
                       ></el-option>
                       <el-option
-                        v-for="item in currentLocationInfo.regionsInfo"
-                        :key="item.regionName"
-                        :label="item.regionName"
-                        :value="item.regionName">
+                        v-for="item in currentLocationInfo.regionsInfo1.concat(currentLocationInfo.regionsInfo2)"
+                        :key="item"
+                        :label="item"
+                        :value="item">
                       </el-option>
                     </el-select>
-                    <el-button type="info" @click="regionHistory">查询</el-button>
+                    <el-button type="primary" @click="regionHistory">查询</el-button>
                     <div id="chartmainline" style="width:100%;height:500px"></div>
                     <div id="priceRateChart" style="width:100%;height:500px;margin-top: 2rem;"></div>
                     <div>
@@ -100,196 +100,17 @@
                 <el-col :span="18" v-show="!showCityInfo">
                   <el-card
                     class="regionInfoCard">
-                    {{currentRegion}}区楼盘信息
+                    {{currentRegion}}区房价信息
 
                   </el-card>
-                  <el-card class="buildingList" id="buildingBinding">
-                    <el-row :gutter="20">
-                      <el-col :span="12" style="padding-left: 5%">
-                        <div class="first-pay-nav">按单价<i>(元/平)</i></div>
-                        <div style="width:40%;">
-                          <ul class="list-container" style="left: 0px;">
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 12px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 12px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 28px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 32px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 44px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 44px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 60px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 40px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 60px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 52px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 28px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 36px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 20px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 24px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 28px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 24px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 28px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 36px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 8px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 12px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 8px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 8px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
-                          </ul>
-                        </div>
-                        <div style="margin-top:90px">
-                          <el-slider
-                            class="priceSlider"
-                            @change="handlePriceArea"
-                            v-model="priceRange"
-                            range
-
-                            :max="100000">
-                          </el-slider>
-                        </div>
-                        <div style="text-align: left;margin-bottom: 20px">
-                          <span class="priceSelectLabel">拖动按钮选择售价</span>
-                          <el-input class="priceSelectInput" v-model="priceRange[0]"></el-input>
-                          ~&nbsp;
-                          <el-input class="priceSelectInput" v-model="priceRange[1]"></el-input>
-                        </div>
-                      </el-col>
-                      <el-col :span="12">
-                        <div class="first-pay-nav">按面积<i>(平)</i></div>
-                        <div style="width:40%;">
-                          <ul class="list-container" style="left: 0px;">
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 12px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 12px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 32px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 44px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 6px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 60px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 36px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 24px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 24px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 16px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 9px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 8px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 3px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 0px; width: 7.5px"></li>
-                            <li class="list-item" style="height: 4px; width: 7.5px"></li>
-                          </ul>
-                        </div>
-                        <div style="margin-top:90px">
-                          <el-slider
-                            class="priceSlider"
-
-                            v-model="areaRange"
-                            range
-                            @change="handlePriceArea"
-                            :max="1000">
-                          </el-slider>
-                        </div>
-                        <div style="text-align: left;margin-bottom: 20px">
-                          <span class="priceSelectLabel">拖动按钮选择面积</span>
-                          <el-input class="priceSelectInput" v-model="areaRange[0]"></el-input>
-                          ~&nbsp;
-                          <el-input class="priceSelectInput" v-model="areaRange[1]"></el-input>
-                        </div>
-                      </el-col>
-                    </el-row>
-                    <div class="line"></div>
-                    <div>
-                      <div class="buildingItem" v-for="item in buildingsByRegion.buildings" :key="item.id"
-                      >
-                        <img class="buildImg"
-                             style="background-color:#ebb563"
-                             :src="'https://ke-image.ljcdn.com/'+item.url+'!m_fill,w_1000,l_fbk'"
-                        />
-                        <div class="buildContent" @click="itemDetail(item.id)">
-                          <div>
-                            <div class="buildName">{{item.xiaoqu}}</div>
-                            <div class="resblock-location">
-                              <span>{{item.region}}</span>
-                              <i class="split">/</i>
-                              <span>{{item.propertyaddress}}</span>
-                            </div>
-                            <div class="resblock-area">
-                              <span>建面 {{Math.round(item.area)}}㎡</span>
-                            </div>
-                            <div class="resblock-tag">
-                              <el-tag class="featureTag" v-for="(it,index) in item.projectfeatures.split(' ')"
-                                      :key="index"
-                                      type="warning">{{it}}
-                              </el-tag>
-                              <!--<span  v-for="(it,index) in item.projectfeatures.split(' ')" :key="index">-->
-                              <!--{{it}}-->
-                              <!--</span>-->
-
-                            </div>
-                            <div class="resblock-price">
-                              <div class="main-price">
-
-                                <span class="number1">{{item.price}}</span>
-                                <span class="desc">&nbsp;元/平(均价)</span>
-
-                              </div>
-
-
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <el-pagination
-                      @size-change="handleSizeChange"
-                      @current-change="handleCurrentChange"
-                      :current-page="buildingsByRegion.pageNo"
-                      :page-sizes="[5,10, 20, 30]"
-                      :page-size="buildingsByRegion.pageSize"
-                      layout="total, sizes, prev, pager, next, jumper"
-                      class="buildingsPagincation"
-                      :total="buildingsByRegion.totalRecord">
-                    </el-pagination>
+                  <el-card id="regionCharts" v-show="!showCityInfo">
+                    <div id="regionChartmainline" style="width:100%;height:500px"></div>
+                    <div id="regionPriceRateChart" style="width:100%;height:500px;margin-top: 2rem;"></div>
                   </el-card>
+
                 </el-col>
                 <el-col :span="6">
-                  <el-card style="height:auto;">
+                  <el-card style="height:auto;width:100%">
                     <div slot="header" class="rightHeaderTitle" v-model="currentLocationInfo">
                       <span>{{currentLocationInfo.locationName}}市各区房价</span>
 
@@ -324,6 +145,37 @@
 
 
                       </el-row>
+                    </div>
+
+                  </el-card>
+                  <el-card class="buildingItem" v-for="item in recommendations.slice(0,4)" :key="item.Information.id"
+                           @click="itemDetail(item.Information.id)">
+                    <img class="buildImg"
+                         style="background-color:#409eff"
+                         :src="'https://ke-image.ljcdn.com/'+item.Picture.pic+'!m_fill,w_1000,l_fbk'"
+                    />
+                    <div class="buildContent" @click="itemDetail(item.Information.id)">
+                      <div>
+                        <div class="buildName">{{item.Information.xiaoqu}}</div>
+                        <div class="resblock-location">
+                          <span>{{item.Information.region}}</span>
+                          <i class="split">/</i>
+                          <span>{{item.Information.propertyaddress}}</span>
+                        </div>
+                        <div class="resblock-area">
+                          <span>建面 {{Math.round(item.Information.area)}}㎡</span>
+                          <div class="resblock-price">
+                            <div class="main-price">
+
+                              <span class="number1">{{item.Information.price}}</span>
+                              <span class="desc">&nbsp;元/平(均价)</span>
+
+                            </div>
+
+
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </el-card>
                 </el-col>
@@ -389,8 +241,8 @@
         inputContent: '',
         //区域历史数据
         locationHistoryData: [],
-
-
+        regionHistoryData: [],
+        recommendations: [],
         optionbar: {
           title: {
             text: 'ECharts 数据统计'
@@ -411,7 +263,8 @@
         },
         currentRegion: '苏州',
         currentUserInfo: "",
-        activeIndex: '2'
+        activeIndex: '2',
+
       }
     }, components: {
       Loading,
@@ -425,7 +278,8 @@
 
           if (newVal != this.currentLocationInfo.locationName) {
             this.showCityInfo = false
-            this.getBuildingsByRegion()
+            this.getRegionHistoryData2()
+            this.getRecommendation()
           } else {
             this.showCityInfo = true
           }
@@ -434,13 +288,40 @@
 
     },
     methods: {
+      //获取推荐楼盘
+      getRecommendation() {
+        var self = this
+        let loadingInstance = Loading.service({fullscreen: true});
+
+        jQuery.ajax({
+          type: 'get',
+          url: this.$store.state.Server + '/buildingPrice/infodata/getAheadLoupan',
+          data: {
+            city: this.currentLocationInfo.locationName,
+            region: this.currentRegion
+          },
+          success: function (res) {
+            loadingInstance.close()
+            if (res.code === 0) {
+              self.recommendations = res.data;
+
+            } else {
+              self.$message.error(res.desc)
+            }
+          },
+          error: function () {
+            loadingInstance.close()
+            self.$message.error('操作错误,请稍后重试')
+          }
+        })
+
+      },
       handlePriceArea() {
         this.getBuildingsByRegion()
       },
       itemDetail(id) {
-        console.log('asd')
         this.$router.push({
-          path: '/priceAnalysis/buildDetail',
+          path: '/buildDetail',
           query: {
             id: id
           }
@@ -471,13 +352,11 @@
       },
       handleSizeChange(val) {
         this.buildingsByRegion.pageSize = val
-        console.log('pageSize', val)
         this.getBuildingsByRegion()
 
       },
       handleCurrentChange(val) {
         this.buildingsByRegion.pageNo = val
-        console.log('currentpage', val)
         this.getBuildingsByRegion()
       },
       search() {
@@ -487,7 +366,164 @@
         }
 
       },
+      showRegionLineChart() {
+        let datas = []
+//        if(this.locationHistoryData.length==0)
+//          return
+        this.regionHistoryData.forEach(item1 => {
+          let tempRegion = {
+            data: item1.historyData.price.map(item => {
+              return item
+            }),
+            type: 'line',
+            smooth: true,
+            name: item1.cityName
+          }
+          datas.push(tempRegion)
+        })
+        let option = {
+          title: {
+            text: this.currentRegion + '区房价趋势图',
+            subtext: '数据源于 @GKD',
+            bottom: '90%',
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          xAxis: {
+            type: 'category',
+            data: this.regionHistoryData[0].historyData.time.map(item => {
+              return item
+            })
+          },
+          yAxis: {
+            type: 'value'
+          },
+          dataZoom: [{
+            startValue: this.regionHistoryData[0].historyData.time[0]
+          }, {
+            type: 'inside'
+          }],
+          visualMap: {
+            top: -5,
+            right: 1,
+            pieces: [{
+              gt: 0,
+              lte: 10000,
+              color: '#096'
+            }, {
+              gt: 10000,
+              lte: 20000,
+              color: '#ffde33'
+            }, {
+              gt: 20000,
+              lte: 30000,
+              color: '#ff9933'
+            }, {
+              gt: 30000,
+              lte: 40000,
+              color: '#cc0033'
+            }, {
+              gt: 40000,
+              lte: 50000,
+              color: '#660099'
+            }, {
+              gt: 50000,
+              color: '#7e0023'
+            }],
+            outOfRange: {
+              color: '#999'
+            }
+          },
+          series: datas
+        };
+        let chartmainline = echarts.init(document.getElementById('regionChartmainline'));
+        chartmainline.setOption(option, true);
 
+      },
+      getRegionHistoryData2() {
+        var self = this
+        let loadingInstance = Loading.service({target: document.getElementById('regionCharts')});
+
+        jQuery.ajax({
+          type: 'get',
+          url: this.$store.state.Server + '/buildingPrice/pricehistorynew/citypricehistory',
+          data: {
+            city: self.currentLocationInfo.locationName,
+            citylevel: self.currentRegion,
+          },
+          success: function (res) {
+            loadingInstance.close()
+            if (res.code === 0) {
+              self.locationHistoryData = []
+              if (res.data.priceHistory.length == 0) {
+                self.$message("此区历史数据缺失，抱歉！")
+                return
+              }
+              let temp = {
+                cityName: '',
+                historyData: {
+                  time: [],
+                  price: [],
+                  proportion: []
+                }
+              }
+
+              temp.cityName = res.data.citylevel
+
+              res.data.priceHistory.forEach((item) => {
+                temp.historyData.time.push(item.time)
+                temp.historyData.price.push(item.price)
+                temp.historyData.proportion.push(item.proportion)
+              })
+              self.regionHistoryData = []
+              self.regionHistoryData.push(temp)
+              self.showRegionLineChart()
+              self.showRegionPriceRateChart()
+
+            }
+          },
+          error: function () {
+            loadingInstance.close()
+            self.$message.error('查询错误,请稍后重试')
+          }
+        })
+      },
+      getRegionByCity(cityName) {
+        var self = this
+        let loadingInstance = Loading.service({target: document.getElementById('mainContent')});
+
+        jQuery.ajax({
+          type: 'get',
+          url: this.$store.state.Server + '/buildingPrice/pricehistorynew/getRegionByCity',
+          data: {
+            city: cityName,
+          },
+          success: function (res) {
+            loadingInstance.close()
+            if (res.code === 0) {
+
+
+              self.currentLocationInfo.regionsInfo1 = []
+
+              self.currentLocationInfo.regionsInfo2 = []
+              if (res.data.length < 16) {
+                self.currentLocationInfo.regionsInfo1 = res.data
+              }
+              else {
+                self.currentLocationInfo.regionsInfo1 = res.data.slice(0, 15)
+                self.currentLocationInfo.regionsInfo2 = res.data.slice(15)
+              }
+            } else {
+              self.$message.error(res.desc)
+            }
+          },
+          error: function () {
+            loadingInstance.close()
+            self.$message.error('查询错误,请稍后重试')
+          }
+        })
+      },
       getCurrentLocationData(cityName) {
         var self = this
         let loadingInstance = Loading.service({target: document.getElementById('mainContent')});
@@ -519,16 +555,17 @@
                 self.currentLocationInfo.proportion.proportion.push(item.proportion)
               })
               self.currentLocationInfo.regionsInfo = []
-              self.currentLocationInfo.regionsInfo1 = []
+//              self.currentLocationInfo.regionsInfo1 = []
               self.currentLocationInfo.regionsInfo = res.data.regionInfo
-              self.currentLocationInfo.regionsInfo2 = []
-              if (res.data.regionInfo.length < 16) {
-                self.currentLocationInfo.regionsInfo1 = res.data.regionInfo
-              }
-              else {
-                self.currentLocationInfo.regionsInfo1 = res.data.regionInfo.slice(0, 15)
-                self.currentLocationInfo.regionsInfo2 = res.data.regionInfo.slice(15)
-              }
+//              self.currentLocationInfo.regionsInfo2 = []
+//              if (res.data.regionInfo.length < 16) {
+//                self.currentLocationInfo.regionsInfo1 = res.data.regionInfo
+//              }
+//              else {
+//                self.currentLocationInfo.regionsInfo1 = res.data.regionInfo.slice(0, 15)
+//                self.currentLocationInfo.regionsInfo2 = res.data.regionInfo.slice(15)
+//              }
+              self.getRegionByCity(cityName)
               self.getCityHistoryData()
               self.getRegionPricesByType()
               self.showRoundChart()
@@ -719,7 +756,7 @@
             type: 'bar',
             itemStyle: {
               normal: {
-                color: '#ebb563'
+                color: '#409eff'
               }
             },
             data: prices,
@@ -847,7 +884,7 @@
             self.buildingsByRegion.totalRecord = []
             self.buildingsByRegion.buildings = []
             if (res.code === 0) {
-              console.log(self.currentRegion)
+
 
               self.buildingsByRegion.regionpageNo = res.data.pageNo
               self.buildingsByRegion.pageSize = res.data.pageSize
@@ -940,6 +977,79 @@
         let chartmainline = echarts.init(document.getElementById('chartmainline'));
         chartmainline.setOption(option, true);
 
+      }, showRegionPriceRateChart() {
+        let datas = []
+        this.regionHistoryData.forEach(item1 => {
+          let tempRegion = {
+            data: item1.historyData.proportion.map(item => {
+              return item * 100
+            }),
+            type: 'line',
+            smooth: false,
+            name: item1.cityName
+          }
+          datas.push(tempRegion)
+        })
+        let option = {
+          title: {
+            text: this.currentRegion + '区房价变化速率折线图',
+
+            bottom: '94%',
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          xAxis: {
+            type: 'category',
+            name: '时间',
+            data: this.regionHistoryData[0].historyData.time.map(item => {
+              return item
+            })
+          },
+          yAxis: {
+            type: 'value',
+            name: '百分比'
+          },
+          dataZoom: [{
+            startValue: this.regionHistoryData[0].historyData.time[0]
+          }, {
+            type: 'inside'
+          }],
+          visualMap: {
+            top: 10,
+            right: 10,
+            pieces: [{
+              gt: -5,
+              lte: 0,
+              color: '#096'
+            }, {
+              gt: 0,
+              lte: 5,
+              color: '#ffde33'
+            }, {
+              gt: 5,
+              lte: 10,
+              color: '#ff9933'
+            }, {
+              gt: 10,
+              lte: 15,
+              color: '#cc0033'
+            }, {
+              gt: 15,
+              lte: 20,
+              color: '#660099'
+            }, {
+              gt: 20,
+              color: '#7e0023'
+            }],
+            outOfRange: {
+              color: '#999'
+            }
+          },
+          series: datas
+        };
+        let priceRateChart = echarts.init(document.getElementById('regionPriceRateChart'));
+        priceRateChart.setOption(option, true);
       },
       showPriceRateChart() {
         let datas = []
@@ -1163,30 +1273,33 @@
 
   #priceAnalysis .buildingItem {
     text-align: left;
+    line-height: 15px;
     display: inline-block;
-    width: 100%;
+    width: 17.6rem;
+    margin-top: 15px;
+    margin-right: 10px;
     /*height: 2rem;*/
-    margin-bottom: 40px;
+    margin-bottom: 0px;
   }
 
   #priceAnalysis .buildImg {
-    width: 18rem;
+    width: 100%;
     height: 11rem;
-    display: inline-block;
+    display: block;
 
   }
 
   #priceAnalysis .buildContent {
 
-    display: inline-block;
-    margin-left: 1rem;
+    display: block;
+
     cursor: pointer;
-    height: 10rem;
-    width: 25rem;
+    height: 6rem;
+    width: 100%;
   }
 
   #priceAnalysis .buildName {
-    cursor: pointer;
+    margin-left: 1rem;
     display: inline-block;
     max-width: 75%;
     font-size: 20px;
@@ -1195,11 +1308,13 @@
     font-weight: 700;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis
+    text-overflow: ellipsis;
+    margin-top: 10px;
   }
 
   #priceAnalysis .resblock-location {
-    margin-top: 21px;
+    margin-left: 1rem;
+    margin-top: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1214,26 +1329,28 @@
   }
 
   #priceAnalysis .resblock-area {
+    margin-left: 1rem;
     height: 16px;
     color: #666;
-    margin-top: 16px;
+    margin-top: 10px;
   }
 
   #priceAnalysis .resblock-tag {
-    margin-top: 18px;
+    margin-top: 5px;
   }
 
   #priceAnalysis .resblock-price {
     position: relative;
+    float: right;
+    margin-right: 1rem;
+    margin-bottom: 10px;
 
-    right: 0;
   }
 
   #priceAnalysis .number1 {
     font-family: Tahoma-Bold;
-    font-size: 28px;
-    line-height: 28px;
-    color: red;
+    font-size: 15px;
+    color: #d44d38;
     vertical-align: bottom;
   }
 
@@ -1248,6 +1365,7 @@
 
     display: inline-block;
     height: 30px;
+
     margin-right: 10px;
     padding: 0 12px;
     line-height: 30px;
@@ -1280,7 +1398,7 @@
   }
 
   #priceAnalysis .regionInfoCard {
-    background-color: #ebb563;
+    background-color: #409eff;
     height: 6.5rem;
     text-align: left;
     color: white;
@@ -1299,25 +1417,25 @@
   }
 
   #priceAnalysis .list-item {
-    background: #ebb56390;
+    background: #409eff90;
     display: inline-block;
     vertical-align: bottom;
   }
 
   #priceAnalysis .priceSlider {
     width: 300px;
-    /*background: #ebb563;*/
+    /*background: #409eff;*/
     margin: 0;
     padding: 0;
 
   }
 
   #priceAnalysis .el-slider__bar {
-    background-color: #ebb563;
+    background-color: #409eff;
   }
 
   #priceAnalysis .el-slider__runway .el-slider__bar {
-    background-color: #ebb563;
+    background-color: #409eff;
   }
 
   #priceAnalysis .el-slider__runway {
@@ -1325,7 +1443,7 @@
   }
 
   #priceAnalysis .el-slider__button {
-    border: 2px solid #ebb563;
+    border: 2px solid #409eff;
   }
 
   #priceAnalysis .first-pay-nav {
@@ -1370,5 +1488,9 @@
     width: 98%;
     height: 1px;
     background-color: #e4e6f0;
+  }
+
+  #priceAnalysis .buildingItem .el-card__body {
+    padding: 0px;
   }
 </style>

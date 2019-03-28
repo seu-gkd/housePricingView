@@ -18,7 +18,7 @@
                 </span>
             </el-tab-pane>
             <el-tab-pane name="1">
-              <span slot="label"><i class="el-icon-star-off"></i> 我的收藏</span>
+              <span slot="label"><i class=""></i> 我的收藏</span>
               <el-card>
                 <div slot="header">共<span style="color:darkred">{{totalRecord}}</span> 套关注房源</div>
                 <div class="buildingList" id="buildingBinding">
@@ -26,7 +26,7 @@
                     <div class="buildingItem" v-for="item in userCollection" :key="item.id"
                          @click="itemDetail(item.id)">
                       <img class="buildImg"
-                           style="background-color:#ebb563"
+                           style="background-color:#409eff"
                            src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3934637875,3708288823&fm=26&gp=0.jpg"
                       />
                       <div class="buildContent" @click="itemDetail(item.id)">
@@ -46,7 +46,7 @@
                             <!--</span>-->
                             <el-tag class="featureTag" v-for="(it,index) in item.projectFeatures.split(' ')"
                                     :key="index"
-                                    type="warning">{{it}}
+                                    type="primary">{{it}}
                             </el-tag>
                           </div>
                           <div class="resblock-price">
@@ -79,14 +79,13 @@
             <el-tab-pane>
               <span slot="label"><i class=""></i> 楼盘推荐</span>
               <el-card>
-                <div slot="header">共<span style="color:darkred">{{totalRecord}}</span> 套关注房源</div>
                 <div class="buildingList" id="buildingBinding1">
                   <div>
-                    <div class="buildingItem" v-for="item in userCollection" :key="item.id"
+                    <div class="buildingItem" v-for="item in vectorCommendation" :key="item.id"
                          @click="itemDetail(item.id)">
                       <img class="buildImg"
-                           style="background-color:#ebb563"
-                           src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3934637875,3708288823&fm=26&gp=0.jpg"
+                           style="background-color:#409eff"
+                           :src="'https://ke-image.ljcdn.com/'+item.url+'!m_fill,w_1000,l_fbk'"
                       />
                       <div class="buildContent" @click="itemDetail(item.id)">
                         <div>
@@ -103,9 +102,9 @@
                             <!--<span v-for="(it,index) in item.projectFeatures.split(' ')" :key="index">-->
                             <!--{{it}}-->
                             <!--</span>-->
-                            <el-tag class="featureTag" v-for="(it,index) in item.projectFeatures.split(' ')"
+                            <el-tag class="featureTag" v-for="(it,index) in item.projectfeatures.split(' ')"
                                     :key="index"
-                                    type="warning">{{it}}
+                                    type="primary">{{it}}
                             </el-tag>
                           </div>
                           <div class="resblock-price">
@@ -122,16 +121,16 @@
                       </div>
                     </div>
                   </div>
-                  <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="pageNo"
-                    :page-sizes="[5,10, 20, 30]"
-                    :page-size="pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    class="buildingsPagincation"
-                    :total="totalRecord">
-                  </el-pagination>
+                  <!--<el-pagination-->
+                  <!--@size-change="handleSizeChange"-->
+                  <!--@current-change="handleCurrentChange"-->
+                  <!--:current-page="vectorCommendation.pageNo"-->
+                  <!--:page-sizes="[5,10, 20, 30]"-->
+                  <!--:page-size="vectorCommendation.pageSize"-->
+                  <!--layout="total, sizes, prev, pager, next, jumper"-->
+                  <!--class="buildingsPagincation"-->
+                  <!--:total="vectorCommendation.totalRecord">-->
+                  <!--</el-pagination>-->
                 </div>
               </el-card>
             </el-tab-pane>
@@ -171,7 +170,8 @@
         userCollection: [],
         pageNo: '',
         pageSize: '',
-        totalRecord: ''
+        totalRecord: '',
+        vectorCommendation: [],
       }
     },
     methods: {
@@ -179,7 +179,7 @@
         console.log('asd')
         this.$router.push({
 
-          path: '/priceAnalysis/buildDetail',
+          path: '/buildDetail',
           query: {
             id: id
           }
@@ -190,6 +190,35 @@
         this.currentUserInfo = sessionStorage.getItem('userName')
         this.currentLocation = sessionStorage.getItem('currentCity')
         this.getUserCollection()
+        this.getUserCollectionVector()
+      },
+      getUserCollectionVector() {
+        let self = this
+        let loadingInstance = Loading.service({fullscreen: true});
+        jQuery.ajax({
+          type: 'GET',
+          headers: {
+//            Authorization: localStorage.getItem('token')
+          },
+          url: this.$store.state.Server + '/PersonUser/personUser/rawRecommend',
+//          url: self.$store.state.SUB_INTERFAVE_URL.GET_CHECKCODE,
+          data: {
+            token: sessionStorage.getItem('jwt')
+          },
+          success: function (res) {
+            loadingInstance.close()
+            if (res.code === 0) {
+              self.vectorCommendation = res.data.results
+
+            } else {
+              self.$message.error(res.desc)
+            }
+          },
+          error: function () {
+            loadingInstance.close()
+            self.$message.error('网络错误，请重试')
+          }
+        })
       },
       getUserCollection() {
         let self = this
@@ -212,7 +241,7 @@
               self.pageSize = res.data.pageSize
               self.totalRecord = res.data.totalRecord
             } else {
-              self.$message.error(res.msg)
+              self.$message.error(res.desc)
             }
           },
           error: function () {
@@ -242,7 +271,7 @@
               self.$router.replace('/')
               self.$router.go(0)
             } else {
-              self.$message.error(res.msg)
+              self.$message.error(res.desc)
             }
           },
           error: function () {
@@ -289,7 +318,7 @@
   }
 
   #userManage .usetInfoTitle {
-    background-color: #ebb563;
+    background-color: #409eff;
     color: white;
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
@@ -417,6 +446,10 @@
   }
 
   #userManage .el-tabs__item.is-active {
-    color: #ebb563;
+    color: #409eff;
+  }
+
+  #userManage .el-tabs__item:hover {
+    color: #409eff;
   }
 </style>

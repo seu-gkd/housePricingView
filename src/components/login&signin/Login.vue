@@ -185,7 +185,7 @@
 
   .log-bg {
     /*background: url(../images/login-bg.jpg);*/
-    background-color: #ebb563;
+    background-color: #409eff;
     width: 100%;
     height: 312px;
     overflow: hidden;
@@ -243,7 +243,7 @@
     color: #fff;
     font-size: 13px;
     -webkit-border-radius: 5px;
-    background-color: #ebb563;
+    background-color: #409eff;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
@@ -270,7 +270,7 @@
   }
 
   .log-email .log-btn {
-    background-color: #ebb563;
+    background-color: #409eff;
     text-align: center;
   }
 

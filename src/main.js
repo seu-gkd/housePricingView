@@ -99,7 +99,8 @@ const store = new Vuex.Store({
   // 存储状态值
   state: {
     activeIndex: '/',
-    Server: 'http://localhost:9988',
+    Server: 'http://47.101.44.55:8090',
+    // Server:'http://localhost:9988',
     currentUserInfo: null,
     isLogin: '1',
     currentLocation: '',
@@ -367,6 +368,8 @@ const LoginOpenList = [
   '/priceForecast',
   '/userManage',
   '/buildDetail',
+  '/mapLayout',
+  '/lookingFor'
 
 ]; // 已登录公共权限
 

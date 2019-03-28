@@ -7,8 +7,8 @@
 
           <el-card style="margin:0 auto;width:100%;text-align: center" body-style="padding:0px">
             <div class="buildTitle">{{buildInfo.xiaoqu}}
-              <el-tag class="colTag" type="warning">访问量：{{parseInt(coll.browsenum)}}次</el-tag>
-              <el-tag class="colTag" type="warning">收藏量：{{parseInt(coll.collectnum)}}次</el-tag>
+              <el-tag class="colTag" type="primary">访问量：{{parseInt(coll.browsenum)}}次</el-tag>
+              <el-tag class="colTag" type="primary">收藏量：{{parseInt(coll.collectnum)}}次</el-tag>
               <!--<span class="col">关注量：<span>{{parseInt(coll.collectnum)}}</span>次</span>-->
               <!--<span class="col">访问量: <span>{{parseInt(coll.browsenum)}}</span>人</span>-->
             </div>
@@ -25,7 +25,7 @@
             </el-carousel>
           </el-card>
           <div>
-            <el-row :gutter="20">
+            <el-row :gutter="18">
               <el-col :span="18">
                 <el-card class="buildInfoCard">
 
@@ -40,7 +40,7 @@
                   </div>
                   <div class="resblock-tag">
                     <el-tag class="featureTag" v-for="(it,index) in buildInfo.projectfeatures.split(' ')" :key="index"
-                            type="warning">{{it}}
+                            type="primary">{{it}}
                     </el-tag>
 
                   </div>
@@ -161,18 +161,31 @@
                         </div>
 
                       </el-col>
+
                     </el-row>
+                    <div class="infoItem">
+                      <span class="label">周边规划：</span>
+                      <span class="val">
+                        <div style="margin-bottom: 10px" v-for="item in nearby" :key="item.id">
+                          <div class="nearByName">{{item.name}}：</div>
+                          <div class="nearByContent">{{item.content}}</div>
+                        </div>
+                      </span>
+                    </div>
                   </div>
 
                 </el-card>
               </el-col>
-              <el-col :span="6" style="height:48rem;overflow-y: scroll">
-
-                <el-card class="buildingItem" v-for="item in recommendations" :key="item.id"
+              <el-col :span="6" style="overflow-y: scroll">
+                <el-card
+                  style="margin-top:15px;text-align:left;font-weight: 700;font-size: 24px;color: white;background-color: #409eff">
+                  推荐楼盘
+                </el-card>
+                <el-card class="buildingItem" v-for="item in recommendations.slice(0,4)" :key="item.id"
                          @click="itemDetail(item.id)">
                   <img class="buildImg"
-                       style="background-color:#ebb563"
-                       src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3934637875,3708288823&fm=26&gp=0.jpg"
+                       style="background-color:#409eff"
+                       :src="'https://ke-image.ljcdn.com/'+item.url+'!m_fill,w_1000,l_fbk'"
                   />
                   <div class="buildContent" @click="itemDetail(item.id)">
                     <div>
@@ -184,27 +197,26 @@
                       </div>
                       <div class="resblock-area">
                         <span>建面 {{Math.round(item.area)}}㎡</span>
-                      </div>
-                      <div class="resblock-tag">
-                        <!--<span v-for="(it,index) in item.projectFeatures.split(' ')" :key="index">-->
-                        <!--{{it}}-->
-                        <!--</span>-->
-                        <el-tag class="featureTag" v-for="(it,index) in item.projectfeatures.split(' ')"
-                                :key="index"
-                                type="warning">{{it}}
-                        </el-tag>
-                      </div>
-                      <div class="resblock-price">
-                        <div class="main-price">
+                        <div class="resblock-price">
+                          <div class="main-price">
 
-                          <span class="number1">{{item.price}}</span>
-                          <span class="desc">&nbsp;元/平(均价)</span>
+                            <span class="number1">{{item.price}}</span>
+                            <span class="desc">&nbsp;元/平(均价)</span>
+
+                          </div>
+
 
                         </div>
-
-
                       </div>
                     </div>
+                    <!-- <div class="resblock-tag">
+
+                      <el-tag class="featureTag" v-for="(it,index) in item.Information.projectfeatures.split(' ')"
+                              :key="index"
+                              type="primary">{{it}}
+                      </el-tag>
+                    </div> -->
+
                   </div>
                 </el-card>
 
@@ -275,19 +287,13 @@
           area: "127.33333333333333",
           id: "44617"
         },
+        nearby: '',
         isCollected: true
       }
     },
     methods: {
       itemDetail(id) {
-        console.log('asd')
-        this.$router.push({
-
-          path: '/priceAnalysis/buildDetail',
-          query: {
-            id: id
-          }
-        },)
+        this.initData(id)
       },
       //获取推荐楼盘
       getRecommendation() {
@@ -295,7 +301,7 @@
         let loadingInstance = Loading.service({fullscreen: true});
 
         jQuery.ajax({
-          type: 'post',
+          type: 'get',
           url: this.$store.state.Server + '/buildingPrice/infodata/getSimilarByOneLoupan',
           data: this.buildInfo,
           success: function (res) {
@@ -381,11 +387,8 @@
         })
       },
       //初始化楼盘数据
-      initData() {
-        let id = ''
-        if (this.$route.query.id && this.$route.query.id !== '') {
-          id = this.$route.query.id
-        }
+      initData(id) {
+
         var self = this
         let loadingInstance = Loading.service({fullscreen: true});
 
@@ -399,6 +402,17 @@
             loadingInstance.close()
             if (res.code === 0) {
               self.buildInfo = res.data.buildInfo
+              let nearBy = res.data.buildInfo.nearby.split('；')
+              let re = []
+              nearBy.forEach(item => {
+                let temp = item.split('：')
+                let t = {
+                  name: temp[0],
+                  content: temp[1]
+                }
+                re.push(t)
+              })
+              self.nearby = re
               self.coll = res.data.coll
               self.picList = res.data.picList;
               self.getUserIsCollected()
@@ -444,7 +458,11 @@
       }
     },
     mounted() {
-      this.initData();
+      let id = ''
+      if (this.$route.query.id && this.$route.query.id !== '') {
+        id = this.$route.query.id
+      }
+      this.initData(id);
     }
   }
 </script>
@@ -454,7 +472,7 @@
     height: 100%;
     z-index: 4;
     flex: 1;
-    overflow-y: scroll;
+    overflow: scroll;
   }
 
   #buildDetail .mainContent {
@@ -464,7 +482,7 @@
     padding-right: 1rem;
     text-align: center;
     padding-top: 75px;
-    width: 70%;
+    width: 1180px;
   }
 
   #buildDetail .buildInfoCard {
@@ -533,6 +551,7 @@
   #buildDetail .buildingItem el-tag {
     display: inline;
   }
+
   #buildDetail .tagItem {
     padding: 6px 8px;
     font-size: 13px;
@@ -555,12 +574,15 @@
     width: 70px;
     font-family: HiraginoSansGB-W6;
     font-size: 14px;
-    color: #9399a5;
+    color: #333333;
+    font-weight: 700;
   }
 
   #buildDetail .val {
-    font-family: HiraginoSansGB-W6;
+    color: #888;
+
     font-size: 14px;
+    font-weight: 400;
   }
 
   #buildDetail .infoItem {
@@ -608,11 +630,12 @@
   #buildDetail .buildingItem {
     text-align: left;
     line-height: 15px;
-    display: block;
-    width: 20rem;
+    display: inline-block;
+    width: 100%;
     margin-top: 15px;
+    margin-right: 10px;
     /*height: 2rem;*/
-    margin-bottom: 10px;
+    margin-bottom: 0px;
   }
 
   #buildDetail .buildImg {
@@ -625,13 +648,14 @@
   #buildDetail .buildContent {
 
     display: block;
-    margin-left: 1rem;
+
     cursor: pointer;
-    height: 10rem;
-    width: 25rem;
+    height: 6rem;
+    width: 100%;
   }
 
   #buildDetail .buildName {
+    margin-left: 1rem;
     display: inline-block;
     max-width: 75%;
     font-size: 20px;
@@ -641,10 +665,11 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-top: 5px;
+    margin-top: 10px;
   }
 
   #buildDetail .resblock-location {
+    margin-left: 1rem;
     margin-top: 10px;
     white-space: nowrap;
     overflow: hidden;
@@ -660,6 +685,7 @@
   }
 
   #buildDetail .resblock-area {
+    margin-left: 1rem;
     height: 16px;
     color: #666;
     margin-top: 10px;
@@ -671,14 +697,16 @@
 
   #buildDetail .resblock-price {
     position: relative;
+    float: right;
+    margin-right: 1rem;
+    margin-bottom: 10px;
 
-    right: 0;
   }
 
   #buildDetail .number1 {
     font-family: Tahoma-Bold;
-    font-size: 28px;
-    color: red;
+    font-size: 15px;
+    color: #d44d38;
     vertical-align: bottom;
   }
 
@@ -728,6 +756,18 @@
 
   #buildDetail .el-carousel__item--card {
     width: 50%;
+  }
+
+  #buildDetail .nearByName {
+    font-weight: 700;
+    color: #666;
+    display: inline-block;
+  }
+
+  #buildDetail .nearByContent {
+    display: inline-block;
+    color: #888;
+    font-weight: 400;
   }
 
 </style>
